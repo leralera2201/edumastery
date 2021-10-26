@@ -1,1 +1,8 @@
 export const API_URL = '';
+
+export const ACTION_STATUS = {
+  NOT_STARTED: 'NOT_STARTED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
+};
