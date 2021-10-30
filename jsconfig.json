@@ -12,6 +12,7 @@
       "device*": ["src/device/*"],
       "pages*": ["src/pages/*"],
       "navigation*": ["src/navigation/*"],
+      "config*": ["src/config/*"],
     }
   }
 }

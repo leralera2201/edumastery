@@ -13,6 +13,7 @@ const MODULE_RESOLVER = [
       assets: './src/assets',
       api: './src/api',
       storage: './src/storage',
+      config: './src/config',
     },
   },
 ];

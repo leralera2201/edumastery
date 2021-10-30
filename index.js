@@ -9,7 +9,10 @@ import App from './src/App';
 import { name as appName } from './app.json';
 
 const Component = () => (
-  <View>
+  <View style={{  flex: 1,
+    backgroundColor: '#003f5c',
+    alignItems: 'center',
+    justifyContent: 'center', }}>
     <Provider store={store}>
       <App />
     </Provider>
