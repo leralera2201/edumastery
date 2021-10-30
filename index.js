@@ -1,22 +1,17 @@
-/**
- * @format
- */
 import React from 'react';
-import { AppRegistry, View } from 'react-native';
+import { AppRegistry } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import store from './src/store';
 import App from './src/App';
 import { name as appName } from './app.json';
 
 const Component = () => (
-  <View style={{  flex: 1,
-    backgroundColor: '#003f5c',
-    alignItems: 'center',
-    justifyContent: 'center', }}>
-    <Provider store={store}>
+  <Provider store={store}>
+    <NavigationContainer>
       <App />
-    </Provider>
-  </View>
+    </NavigationContainer>
+  </Provider>
 );
 
 AppRegistry.registerComponent(appName, () => Component);

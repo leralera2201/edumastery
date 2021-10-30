@@ -11,7 +11,7 @@ import Config from 'config/colors';
 
 import Device from 'device';
 
-const Registration = () => {
+const Registration = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -36,6 +36,10 @@ const Registration = () => {
 
   const handlePasswordChange = (text) => {
     setPassword(text);
+  };
+
+  const handleGoBack = () => {
+    navigation.goBack();
   };
 
   return (
@@ -89,7 +93,7 @@ const Registration = () => {
         />
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleGoBack}>
         <Text style={styles.forgot_button}>Already have an account?</Text>
       </TouchableOpacity>
 

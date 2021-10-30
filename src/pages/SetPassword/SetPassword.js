@@ -11,24 +11,20 @@ import Config from 'config/colors';
 
 import Device from 'device';
 
-const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+const SetPassword = ({ navigation }) => {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleEmailChange = (text) => {
-    setEmail(text);
+  const handleConfirmPasswordChange = (text) => {
+    setConfirmPassword(text);
   };
 
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
 
-  const handleNavigateRegistration = () => {
-    navigation.navigate('Registration');
-  };
-
-  const handleNavigateToForgotPassword = () => {
-    navigation.navigate('ForgotPassword');
+  const handleNavigate = () => {
+    navigation.navigate('Home');
   };
 
   return (
@@ -38,14 +34,6 @@ const Login = ({ navigation }) => {
         style={styles.image}
         source={require('assets/logo.png')}
       />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleEmailChange}
-        />
-      </View>
 
       <View style={styles.inputView}>
         <TextInput
@@ -56,16 +44,17 @@ const Login = ({ navigation }) => {
           onChangeText={handlePasswordChange}
         />
       </View>
-
-      <TouchableOpacity onPress={handleNavigateToForgotPassword}>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavigateRegistration}>
-        <Text style={styles.forgot_button}>Do not have an account?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>Login</Text>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Confirm password"
+          placeholderTextColor="#003f5c"
+          secureTextEntry={true}
+          onChangeText={handleConfirmPasswordChange}
+        />
+      </View>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleNavigate}>
+        <Text style={styles.loginText}>Update password</Text>
       </TouchableOpacity>
     </View>
   );
@@ -120,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default SetPassword;

@@ -11,24 +11,19 @@ import Config from 'config/colors';
 
 import Device from 'device';
 
-const Login = ({ navigation }) => {
+const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   const handleEmailChange = (text) => {
     setEmail(text);
   };
 
-  const handlePasswordChange = (text) => {
-    setPassword(text);
+  const handleGoBack = () => {
+    navigation.goBack();
   };
 
-  const handleNavigateRegistration = () => {
-    navigation.navigate('Registration');
-  };
-
-  const handleNavigateToForgotPassword = () => {
-    navigation.navigate('ForgotPassword');
+  const handleNavigate = () => {
+    navigation.navigate('SetPassword');
   };
 
   return (
@@ -47,25 +42,12 @@ const Login = ({ navigation }) => {
         />
       </View>
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-        />
-      </View>
-
-      <TouchableOpacity onPress={handleNavigateToForgotPassword}>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavigateRegistration}>
-        <Text style={styles.forgot_button}>Do not have an account?</Text>
+      <TouchableOpacity onPress={handleGoBack}>
+        <Text style={styles.forgot_button}>Return to login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>Login</Text>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleNavigate}>
+        <Text style={styles.loginText}>Confirm</Text>
       </TouchableOpacity>
     </View>
   );
@@ -92,8 +74,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: '70%',
     height: 45,
-    marginBottom: 20,
     alignItems: 'center',
+    marginBottom: 60,
   },
 
   textInput: {
@@ -120,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default ForgotPassword;

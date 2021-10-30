@@ -1,27 +1,45 @@
 import React from 'react';
-import { StatusBar, useColorScheme, View } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Login from 'pages/Login';
 import Registration from 'pages/Registration';
+import ForgotPassword from 'pages/ForgotPassword';
+import SetPassword from 'pages/SetPassword';
 
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
+function HomeScreen({ navigation }) {
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    backgroundColor: '#fff',
+  };
+
+  const handlePress = () => {
+    navigation.navigate('Login');
   };
 
   return (
     <View style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      {/* <Login /> */}
-      <Registration />
-   </View>
+      <Text>Home Screen</Text>
+      <TouchableOpacity onPress={handlePress}>
+        <Text>Move to Login</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Registration" component={Registration} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="SetPassword" component={SetPassword} />
+    </Stack.Navigator>
   );
 };
 
