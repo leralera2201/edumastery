@@ -1,45 +1,113 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import TextInput from 'components/TextInput';
 import Config from 'config/colors';
+import {
+  maxLength,
+  minLength,
+  required,
+  validateEmail,
+  validateForm,
+  equal,
+} from 'utils/validate';
 
 import Device from 'device';
 
 const Registration = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [values, setValues] = useState({
+    email: '',
+    name: '',
+    surname: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [errors, setErrors] = useState({
+    email: {
+      validators: [required, validateEmail],
+      messages: [],
+    },
+    name: {
+      validators: [required, minLength(2), maxLength(30)],
+      messages: [],
+    },
+    surname: {
+      validators: [required, minLength(2), maxLength(30)],
+      messages: [],
+    },
+    password: {
+      validators: [required, minLength(6)],
+      messages: [],
+    },
+    confirmPassword: {
+      validators: [required],
+      messages: [],
+    },
+  });
 
   const handleEmailChange = (text) => {
-    setEmail(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      email: text,
+    }));
   };
 
   const handleNameChange = (text) => {
-    setName(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      name: text,
+    }));
   };
 
   const handleSurnameChange = (text) => {
-    setSurname(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      surname: text,
+    }));
   };
 
   const handleConfirmPasswordChange = (text) => {
-    setConfirmPassword(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      confirmPassword: text,
+    }));
   };
 
   const handlePasswordChange = (text) => {
-    setPassword(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      password: text,
+    }));
   };
 
   const handleGoBack = () => {
     navigation.goBack();
+  };
+
+  const handleRegister = () => {
+    //replace entries with reduce
+    const { newErrors, isValid } = validateForm(values, errors);
+    let errorsCopy = { ...newErrors };
+    const confirmPasswordError = equal(
+      values.confirmPassword,
+      values.password,
+      'password',
+    );
+    if (confirmPasswordError) {
+      errorsCopy = {
+        ...errorsCopy,
+        confirmPassword: {
+          ...errorsCopy.confirmPassword,
+          messages: [
+            ...errorsCopy.confirmPassword.messages,
+            confirmPasswordError,
+          ],
+        },
+      };
+    }
+    setErrors(errorsCopy);
+    if (isValid && !confirmPasswordError) {
+      // do registration
+    }
   };
 
   return (
@@ -49,55 +117,58 @@ const Registration = ({ navigation }) => {
         style={styles.image}
         source={require('assets/logo.png')}
       />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleEmailChange}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Name"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleNameChange}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Surname"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleSurnameChange}
-        />
-      </View>
-
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Confirm password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={handleConfirmPasswordChange}
-        />
-      </View>
-
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Email"
+        placeholderTextColor="#003f5c"
+        onChangeText={handleEmailChange}
+        value={values.email}
+        errors={errors.email.messages}
+      />
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Name"
+        placeholderTextColor="#003f5c"
+        onChangeText={handleNameChange}
+        value={values.name}
+        errors={errors.name.messages}
+      />
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Surname"
+        placeholderTextColor="#003f5c"
+        onChangeText={handleSurnameChange}
+        value={values.surname}
+        errors={errors.surname.messages}
+      />
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Password"
+        placeholderTextColor="#003f5c"
+        secureTextEntry={true}
+        onChangeText={handlePasswordChange}
+        value={values.password}
+        errors={errors.password.messages}
+      />
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Confirm password"
+        placeholderTextColor="#003f5c"
+        secureTextEntry={true}
+        onChangeText={handleConfirmPasswordChange}
+        value={values.confirmPassword}
+        errors={errors.confirmPassword.messages}
+      />
       <TouchableOpacity onPress={handleGoBack}>
         <Text style={styles.forgot_button}>Already have an account?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
         <Text style={styles.loginText}>Register</Text>
       </TouchableOpacity>
     </View>
@@ -125,7 +196,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: '70%',
     height: 45,
-    marginBottom: 20,
     alignItems: 'center',
   },
 

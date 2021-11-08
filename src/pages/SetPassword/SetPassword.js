@@ -1,30 +1,74 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Config from 'config/colors';
+import TextInput from 'components/TextInput';
+import {
+  maxLength,
+  minLength,
+  required,
+  validateEmail,
+  validateForm,
+  equal,
+} from 'utils/validate';
 
 import Device from 'device';
 
 const SetPassword = ({ navigation }) => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [values, setValues] = useState({
+    password: '',
+    confirmPassword: '',
+  });
+  const [errors, setErrors] = useState({
+    password: {
+      validators: [required, minLength(6)],
+      messages: [],
+    },
+    confirmPassword: {
+      validators: [required],
+      messages: [],
+    },
+  });
 
   const handleConfirmPasswordChange = (text) => {
-    setConfirmPassword(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      confirmPassword: text,
+    }));
   };
 
   const handlePasswordChange = (text) => {
-    setPassword(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      password: text,
+    }));
   };
 
-  const handleNavigate = () => {
-    navigation.navigate('Home');
+  const handleSetPassword = () => {
+    //replace entries with reduce
+    const { newErrors, isValid } = validateForm(values, errors);
+    let errorsCopy = { ...newErrors };
+    const confirmPasswordError = equal(
+      values.confirmPassword,
+      values.password,
+      'password',
+    );
+    if (confirmPasswordError) {
+      errorsCopy = {
+        ...errorsCopy,
+        confirmPassword: {
+          ...errorsCopy.confirmPassword,
+          messages: [
+            ...errorsCopy.confirmPassword.messages,
+            confirmPasswordError,
+          ],
+        },
+      };
+    }
+    setErrors(errorsCopy);
+    if (isValid && !confirmPasswordError) {
+      // do registration
+      navigation.navigate('Home');
+    }
   };
 
   return (
@@ -34,26 +78,27 @@ const SetPassword = ({ navigation }) => {
         style={styles.image}
         source={require('assets/logo.png')}
       />
-
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Confirm password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={handleConfirmPasswordChange}
-        />
-      </View>
-      <TouchableOpacity style={styles.loginBtn} onPress={handleNavigate}>
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Password"
+        placeholderTextColor="#003f5c"
+        secureTextEntry={true}
+        onChangeText={handlePasswordChange}
+        value={values.password}
+        errors={errors.password.messages}
+      />
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Confirm password"
+        placeholderTextColor="#003f5c"
+        secureTextEntry={true}
+        onChangeText={handleConfirmPasswordChange}
+        value={values.confirmPassword}
+        errors={errors.confirmPassword.messages}
+      />
+      <TouchableOpacity style={styles.loginBtn} onPress={handleSetPassword}>
         <Text style={styles.loginText}>Update password</Text>
       </TouchableOpacity>
     </View>
@@ -81,7 +126,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: '70%',
     height: 45,
-    marginBottom: 20,
     alignItems: 'center',
   },
 

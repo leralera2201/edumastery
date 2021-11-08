@@ -1,29 +1,41 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import TextInput from 'components/TextInput';
 import Config from 'config/colors';
+import { required, validateEmail, validateForm } from 'utils/validate';
 
 import Device from 'device';
 
 const ForgotPassword = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [values, setValues] = useState({
+    email: '',
+  });
+  const [errors, setErrors] = useState({
+    email: {
+      validators: [required, validateEmail],
+      messages: [],
+    },
+  });
 
   const handleEmailChange = (text) => {
-    setEmail(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      email: text,
+    }));
   };
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const handleNavigate = () => {
-    navigation.navigate('SetPassword');
+  const handleForgot = () => {
+    //replace entries with reduce
+    const { newErrors, isValid } = validateForm(values, errors);
+    setErrors(newErrors);
+    if (isValid) {
+      // do forgot password
+      navigation.navigate('SetPassword');
+    }
   };
 
   return (
@@ -33,12 +45,15 @@ const ForgotPassword = ({ navigation }) => {
         style={styles.image}
         source={require('assets/logo.png')}
       />
-      <View style={styles.inputView}>
+      <View style={styles.bottomSpace}>
         <TextInput
-          style={styles.textInput}
+          inputStyle={styles.textInput}
+          inputViewStyle={styles.inputView}
           placeholder="Email"
           placeholderTextColor="#003f5c"
           onChangeText={handleEmailChange}
+          value={values.email}
+          errors={errors.email.messages}
         />
       </View>
 
@@ -46,7 +61,7 @@ const ForgotPassword = ({ navigation }) => {
         <Text style={styles.forgot_button}>Return to login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={handleNavigate}>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleForgot}>
         <Text style={styles.loginText}>Confirm</Text>
       </TouchableOpacity>
     </View>
@@ -61,23 +76,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-
   image: {
     flex: 1,
     alignSelf: 'stretch',
     width: Device.width,
     maxHeight: 200,
   },
-
+  bottomSpace: {
+    width: '100%',
+    marginBottom: 60,
+  },
   inputView: {
     backgroundColor: Config.secondary,
     borderRadius: 30,
     width: '70%',
     height: 45,
     alignItems: 'center',
-    marginBottom: 60,
   },
-
   textInput: {
     height: 50,
     flex: 1,

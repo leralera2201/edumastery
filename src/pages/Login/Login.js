@@ -1,26 +1,43 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Config from 'config/colors';
-
+import TextInput from 'components/TextInput';
 import Device from 'device';
+import {
+  minLength,
+  required,
+  validateEmail,
+  validateForm,
+} from 'utils/validate';
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [values, setValues] = useState({
+    email: '',
+    password: '',
+  });
+  const [errors, setErrors] = useState({
+    email: {
+      validators: [required, validateEmail],
+      messages: [],
+    },
+    password: {
+      validators: [required, minLength(6)],
+      messages: [],
+    },
+  });
 
   const handleEmailChange = (text) => {
-    setEmail(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      email: text,
+    }));
   };
 
   const handlePasswordChange = (text) => {
-    setPassword(text);
+    setValues((prevValues) => ({
+      ...prevValues,
+      password: text,
+    }));
   };
 
   const handleNavigateRegistration = () => {
@@ -31,6 +48,15 @@ const Login = ({ navigation }) => {
     navigation.navigate('ForgotPassword');
   };
 
+  const handleLogin = () => {
+    //replace entries with reduce
+    const { newErrors, isValid } = validateForm(values, errors);
+    setErrors(newErrors);
+    if (isValid) {
+      // do login
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -38,25 +64,25 @@ const Login = ({ navigation }) => {
         style={styles.image}
         source={require('assets/logo.png')}
       />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleEmailChange}
-        />
-      </View>
-
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-        />
-      </View>
-
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Email"
+        placeholderTextColor="#003f5c"
+        onChangeText={handleEmailChange}
+        value={values.email}
+        errors={errors.email.messages}
+      />
+      <TextInput
+        inputStyle={styles.textInput}
+        inputViewStyle={styles.inputView}
+        placeholder="Password"
+        placeholderTextColor="#003f5c"
+        secureTextEntry={true}
+        value={values.password}
+        onChangeText={handlePasswordChange}
+        errors={errors.password.messages}
+      />
       <TouchableOpacity onPress={handleNavigateToForgotPassword}>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
@@ -64,7 +90,7 @@ const Login = ({ navigation }) => {
         <Text style={styles.forgot_button}>Do not have an account?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
     </View>
@@ -92,7 +118,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: '70%',
     height: 45,
-    marginBottom: 20,
     alignItems: 'center',
   },
 
