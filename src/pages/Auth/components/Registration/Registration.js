@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import TextInput from 'components/TextInput';
 import Config from 'config/colors';
@@ -12,8 +13,11 @@ import {
 } from 'utils/validate';
 
 import Device from 'device';
+import { registerStart } from 'pages/Auth/actions/auth.actions';
+import { getAuth, getAuthStatus } from 'pages/Auth/selectors/auth.selectors';
 
-const Registration = ({ navigation }) => {
+// TODO: add loader
+const Registration = ({ navigation, register, auth, status }) => {
   const [values, setValues] = useState({
     email: '',
     name: '',
@@ -106,7 +110,7 @@ const Registration = ({ navigation }) => {
     }
     setErrors(errorsCopy);
     if (isValid && !confirmPasswordError) {
-      // do registration
+      register(values);
     }
   };
 
@@ -223,4 +227,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Registration;
+const mapStateToProps = (state) => ({
+  auth: getAuth(state),
+  status: getAuthStatus(state),
+});
+
+const mapDispatchToProps = {
+  register: registerStart,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

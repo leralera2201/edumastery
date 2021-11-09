@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Login from 'pages/Login';
-import Registration from 'pages/Registration';
-import ForgotPassword from 'pages/ForgotPassword';
-import SetPassword from 'pages/SetPassword';
+import Login from 'pages/Auth/components/Login';
+import Registration from 'pages/Auth/components/Registration';
+import ForgotPassword from 'pages/Auth/components/ForgotPassword';
+import SetPassword from 'pages/Auth/components/SetPassword';
 
 function HomeScreen({ navigation }) {
   const backgroundStyle = {

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import loginReducer from 'pages/Login/reducers';
+import auth from 'pages/Auth/reducers';
 
 const createRootReducer = () =>
   combineReducers({
-    login: loginReducer,
+    auth: auth,
   });
 
 export default createRootReducer;

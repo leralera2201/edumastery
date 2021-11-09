@@ -1,7 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
 
-// import sagas
-import * as loginSagas from 'pages/Login/sagas';
+import * as loginSagas from 'pages/Auth/sagas';
 
 const combinedSagas = {
   ...loginSagas,
