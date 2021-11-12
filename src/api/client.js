@@ -20,4 +20,23 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
+client.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    if (error.response !== undefined) {
+      if (error.response.status === 401 || error.response.status === 403) {
+        // removeCookie('X-AuthToken');
+      }
+      const throwableError = {
+        code: error.response.status,
+        text: error.response.data.message,
+      };
+
+      throw throwableError;
+    } else {
+      throw error;
+    }
+  },
+);
+
 export default client;

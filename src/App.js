@@ -16,7 +16,7 @@ function HomeScreen({ navigation }) {
   };
 
   const handlePress = () => {
-    navigation.navigate('Login');
+    navigation.replace('Login');
   };
 
   return (

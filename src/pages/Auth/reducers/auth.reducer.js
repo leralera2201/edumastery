@@ -44,6 +44,12 @@ const authReducer = (state = initialState, action) => {
         status: ACTION_STATUS.ERROR,
         error: action.payload,
       };
+    case AUTH_ACTION_TYPES.REGISTER.RESET:
+      return {
+        ...state,
+        status: ACTION_STATUS.NOT_STARTED,
+        error: '',
+      };
     //////////////////////////////////////////
     case AUTH_ACTION_TYPES.FORGOT_PASSWORD.IN_PROGRESS:
       return {

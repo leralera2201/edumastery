@@ -41,6 +41,11 @@ export const registerError = createAction(
   (error) => error,
 );
 
+export const registerReset = createAction(
+  AUTH_ACTION_TYPES.REGISTER.RESET,
+  (error) => error,
+);
+
 //////////////////////////////////////////
 export const forgotPasswordStart = createAction(
   AUTH_ACTION_TYPES.FORGOT_PASSWORD.START,

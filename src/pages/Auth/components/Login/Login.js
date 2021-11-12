@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Config from 'config/colors';
 import TextInput from 'components/TextInput';
+import Loader from 'components/Loader';
+import { ACTION_STATUS } from 'constants';
+import { isLoading } from 'utils/isLoading';
+import { loginUserStart } from '../../actions/auth.actions';
+import { getAuthStatus } from '../../selectors/auth.selectors';
 import Device from 'device';
 import {
   minLength,
@@ -10,7 +16,7 @@ import {
   validateForm,
 } from 'utils/validate';
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, status, login }) => {
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -25,6 +31,41 @@ const Login = ({ navigation }) => {
       messages: [],
     },
   });
+
+  useEffect(() => {
+    if (status === ACTION_STATUS.SUCCESS) {
+      navigation.replace('Home');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  const handleBlur = (name) => {
+    const messages = errors[name].validators
+      .reduce((acc, validate) => {
+        acc.push(validate(values[name]));
+        return acc;
+      }, [])
+      .filter((msg) => !!msg);
+
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: {
+        ...prevValues[name],
+        showError: true,
+        messages,
+      },
+    }));
+  };
+
+  const handleFocus = (name) => {
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: {
+        ...prevValues[name],
+        showError: false,
+      },
+    }));
+  };
 
   const handleEmailChange = (text) => {
     setValues((prevValues) => ({
@@ -41,7 +82,7 @@ const Login = ({ navigation }) => {
   };
 
   const handleNavigateRegistration = () => {
-    navigation.navigate('Registration');
+    navigation.replace('Registration');
   };
 
   const handleNavigateToForgotPassword = () => {
@@ -49,16 +90,18 @@ const Login = ({ navigation }) => {
   };
 
   const handleLogin = () => {
-    //replace entries with reduce
     const { newErrors, isValid } = validateForm(values, errors);
     setErrors(newErrors);
     if (isValid) {
-      // do login
+      login(values);
     }
   };
 
+  const loading = isLoading(status);
+
   return (
     <View style={styles.container}>
+      {loading && <Loader />}
       <Image
         resizeMode="contain"
         style={styles.image}
@@ -71,7 +114,12 @@ const Login = ({ navigation }) => {
         placeholderTextColor="#003f5c"
         onChangeText={handleEmailChange}
         value={values.email}
-        errors={errors.email.messages}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect={false}
+        errors={errors.email.showError ? errors.email.messages : []}
+        onBlur={() => handleBlur('email')}
+        onFocus={() => handleFocus('email')}
       />
       <TextInput
         inputStyle={styles.textInput}
@@ -81,7 +129,12 @@ const Login = ({ navigation }) => {
         secureTextEntry={true}
         value={values.password}
         onChangeText={handlePasswordChange}
-        errors={errors.password.messages}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect={false}
+        errors={errors.password.showError ? errors.password.messages : []}
+        onBlur={() => handleBlur('password')}
+        onFocus={() => handleFocus('password')}
       />
       <TouchableOpacity onPress={handleNavigateToForgotPassword}>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
@@ -145,4 +198,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+const mapStateToProps = (state) => ({
+  status: getAuthStatus(state),
+});
+
+const mapDispatchToProps = {
+  login: loginUserStart,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import TextInput from 'components/TextInput';
+import Loader from 'components/Loader';
 import Config from 'config/colors';
 import {
   maxLength,
@@ -11,13 +12,14 @@ import {
   validateForm,
   equal,
 } from 'utils/validate';
+import { isLoading } from 'utils/isLoading';
 
 import Device from 'device';
-import { registerStart } from 'pages/Auth/actions/auth.actions';
-import { getAuth, getAuthStatus } from 'pages/Auth/selectors/auth.selectors';
+import { registerReset, registerStart } from 'pages/Auth/actions/auth.actions';
+import { getAuthStatus } from 'pages/Auth/selectors/auth.selectors';
+import { ACTION_STATUS } from 'constants';
 
-// TODO: add loader
-const Registration = ({ navigation, register, auth, status }) => {
+const Registration = ({ navigation, register, status, registerReset }) => {
   const [values, setValues] = useState({
     email: '',
     name: '',
@@ -29,29 +31,85 @@ const Registration = ({ navigation, register, auth, status }) => {
     email: {
       validators: [required, validateEmail],
       messages: [],
+      showError: false,
     },
     name: {
       validators: [required, minLength(2), maxLength(30)],
       messages: [],
+      showError: false,
     },
     surname: {
       validators: [required, minLength(2), maxLength(30)],
       messages: [],
+      showError: false,
     },
     password: {
       validators: [required, minLength(6)],
       messages: [],
+      showError: false,
     },
     confirmPassword: {
       validators: [required],
       messages: [],
+      showError: false,
     },
   });
+
+  useEffect(() => {
+    if (status === ACTION_STATUS.SUCCESS) {
+      navigation.replace('Login');
+    }
+
+    return () => {
+      registerReset();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  const loading = isLoading(status);
 
   const handleEmailChange = (text) => {
     setValues((prevValues) => ({
       ...prevValues,
       email: text,
+    }));
+  };
+
+  const handleBlur = (name) => {
+    let messages = errors[name].validators
+      .reduce((acc, validate) => {
+        acc.push(validate(values[name]));
+        return acc;
+      }, [])
+      .filter((msg) => !!msg);
+
+    if (name === 'confirmPassword') {
+      const isEqualPasswords = equal(
+        values.confirmPassword,
+        values.password,
+        'password',
+      );
+      if (isEqualPasswords) {
+        messages = [...messages, isEqualPasswords];
+      }
+    }
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: {
+        ...prevValues[name],
+        showError: true,
+        messages,
+      },
+    }));
+  };
+
+  const handleFocus = (name) => {
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: {
+        ...prevValues[name],
+        showError: false,
+      },
     }));
   };
 
@@ -84,11 +142,10 @@ const Registration = ({ navigation, register, auth, status }) => {
   };
 
   const handleGoBack = () => {
-    navigation.goBack();
+    navigation.replace('Login');
   };
 
   const handleRegister = () => {
-    //replace entries with reduce
     const { newErrors, isValid } = validateForm(values, errors);
     let errorsCopy = { ...newErrors };
     const confirmPasswordError = equal(
@@ -109,13 +166,15 @@ const Registration = ({ navigation, register, auth, status }) => {
       };
     }
     setErrors(errorsCopy);
+    const { confirmPassword, ...otherValues } = values;
     if (isValid && !confirmPasswordError) {
-      register(values);
+      register(otherValues);
     }
   };
 
   return (
     <View style={styles.container}>
+      {loading && <Loader />}
       <Image
         resizeMode="contain"
         style={styles.image}
@@ -128,7 +187,12 @@ const Registration = ({ navigation, register, auth, status }) => {
         placeholderTextColor="#003f5c"
         onChangeText={handleEmailChange}
         value={values.email}
-        errors={errors.email.messages}
+        errors={errors.email.showError ? errors.email.messages : []}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect={false}
+        onBlur={() => handleBlur('email')}
+        onFocus={() => handleFocus('email')}
       />
       <TextInput
         inputStyle={styles.textInput}
@@ -137,7 +201,12 @@ const Registration = ({ navigation, register, auth, status }) => {
         placeholderTextColor="#003f5c"
         onChangeText={handleNameChange}
         value={values.name}
-        errors={errors.name.messages}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect={false}
+        errors={errors.name.showError ? errors.name.messages : []}
+        onBlur={() => handleBlur('name')}
+        onFocus={() => handleFocus('name')}
       />
       <TextInput
         inputStyle={styles.textInput}
@@ -146,7 +215,12 @@ const Registration = ({ navigation, register, auth, status }) => {
         placeholderTextColor="#003f5c"
         onChangeText={handleSurnameChange}
         value={values.surname}
-        errors={errors.surname.messages}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect={false}
+        errors={errors.surname.showError ? errors.surname.messages : []}
+        onBlur={() => handleBlur('surname')}
+        onFocus={() => handleFocus('surname')}
       />
       <TextInput
         inputStyle={styles.textInput}
@@ -156,7 +230,12 @@ const Registration = ({ navigation, register, auth, status }) => {
         secureTextEntry={true}
         onChangeText={handlePasswordChange}
         value={values.password}
-        errors={errors.password.messages}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect={false}
+        errors={errors.password.showError ? errors.password.messages : []}
+        onBlur={() => handleBlur('password')}
+        onFocus={() => handleFocus('password')}
       />
       <TextInput
         inputStyle={styles.textInput}
@@ -166,12 +245,20 @@ const Registration = ({ navigation, register, auth, status }) => {
         secureTextEntry={true}
         onChangeText={handleConfirmPasswordChange}
         value={values.confirmPassword}
-        errors={errors.confirmPassword.messages}
+        autoCapitalize="none"
+        autoComplete="off"
+        autoCorrect={false}
+        errors={
+          errors.confirmPassword.showError
+            ? errors.confirmPassword.messages
+            : []
+        }
+        onBlur={() => handleBlur('confirmPassword')}
+        onFocus={() => handleFocus('confirmPassword')}
       />
       <TouchableOpacity onPress={handleGoBack}>
         <Text style={styles.forgot_button}>Already have an account?</Text>
       </TouchableOpacity>
-
       <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
         <Text style={styles.loginText}>Register</Text>
       </TouchableOpacity>
@@ -228,12 +315,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  auth: getAuth(state),
   status: getAuthStatus(state),
 });
 
 const mapDispatchToProps = {
   register: registerStart,
+  registerReset: registerReset,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Registration);
