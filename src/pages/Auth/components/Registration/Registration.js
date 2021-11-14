@@ -15,11 +15,11 @@ import {
 import { isLoading } from 'utils/isLoading';
 
 import Device from 'device';
-import { registerReset, registerStart } from 'pages/Auth/actions/auth.actions';
+import { resetAuth, registerStart } from 'pages/Auth/actions/auth.actions';
 import { getAuthStatus } from 'pages/Auth/selectors/auth.selectors';
 import { ACTION_STATUS } from 'constants';
 
-const Registration = ({ navigation, register, status, registerReset }) => {
+const Registration = ({ navigation, register, status, resetRegister }) => {
   const [values, setValues] = useState({
     email: '',
     name: '',
@@ -61,7 +61,7 @@ const Registration = ({ navigation, register, status, registerReset }) => {
     }
 
     return () => {
-      registerReset();
+      resetRegister();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
+    marginBottom: 20,
     backgroundColor: Config.primary,
   },
   loginText: {
@@ -320,7 +321,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   register: registerStart,
-  registerReset: registerReset,
+  resetRegister: resetAuth,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Registration);

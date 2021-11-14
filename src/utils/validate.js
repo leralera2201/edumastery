@@ -35,6 +35,7 @@ export const validateForm = (values, errors) => {
     initial[name] = {
       ...errors[name],
       messages,
+      showError: true,
     };
     return initial;
   }, {});

@@ -7,7 +7,7 @@ import Loader from 'components/Loader';
 import { ACTION_STATUS } from 'constants';
 import { isLoading } from 'utils/isLoading';
 import { loginUserStart } from '../../actions/auth.actions';
-import { getAuthStatus } from '../../selectors/auth.selectors';
+import { getAuth, getAuthStatus } from '../../selectors/auth.selectors';
 import Device from 'device';
 import {
   minLength,
@@ -16,7 +16,7 @@ import {
   validateForm,
 } from 'utils/validate';
 
-const Login = ({ navigation, status, login }) => {
+const Login = ({ navigation, status, login, data }) => {
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -34,7 +34,11 @@ const Login = ({ navigation, status, login }) => {
 
   useEffect(() => {
     if (status === ACTION_STATUS.SUCCESS) {
-      navigation.replace('Home');
+      if (!data?.nickname) {
+        navigation.replace('SetUserInfo');
+      } else {
+        navigation.replace('Home');
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -192,6 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 40,
     backgroundColor: Config.primary,
+    marginBottom: 20,
   },
   loginText: {
     color: '#ffffff',
@@ -200,6 +205,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   status: getAuthStatus(state),
+  data: getAuth(state),
 });
 
 const mapDispatchToProps = {

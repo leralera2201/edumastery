@@ -3,7 +3,7 @@ import auth from 'pages/Auth/reducers';
 
 const createRootReducer = () =>
   combineReducers({
-    auth: auth,
+    auth,
   });
 
 export default createRootReducer;

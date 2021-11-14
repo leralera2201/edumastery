@@ -5,4 +5,5 @@ export default {
   primary,
   secondary,
   error: '#EE1111',
+  lightGray: '#e9ebf2',
 };

@@ -17,7 +17,7 @@ const authReducer = (state = initialState, action) => {
     case AUTH_ACTION_TYPES.LOGIN_USER.SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
       };
     case AUTH_ACTION_TYPES.LOGIN_USER.ERROR:
@@ -35,7 +35,7 @@ const authReducer = (state = initialState, action) => {
     case AUTH_ACTION_TYPES.REGISTER.SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
       };
     case AUTH_ACTION_TYPES.REGISTER.ERROR:
@@ -44,7 +44,7 @@ const authReducer = (state = initialState, action) => {
         status: ACTION_STATUS.ERROR,
         error: action.payload,
       };
-    case AUTH_ACTION_TYPES.REGISTER.RESET:
+    case AUTH_ACTION_TYPES.RESET:
       return {
         ...state,
         status: ACTION_STATUS.NOT_STARTED,
@@ -59,7 +59,7 @@ const authReducer = (state = initialState, action) => {
     case AUTH_ACTION_TYPES.FORGOT_PASSWORD.SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
       };
     case AUTH_ACTION_TYPES.FORGOT_PASSWORD.ERROR:
@@ -77,7 +77,7 @@ const authReducer = (state = initialState, action) => {
     case AUTH_ACTION_TYPES.SET_PASSWORD.SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
       };
     case AUTH_ACTION_TYPES.SET_PASSWORD.ERROR:
@@ -85,6 +85,34 @@ const authReducer = (state = initialState, action) => {
         ...state,
         status: ACTION_STATUS.ERROR,
         error: action.payload,
+      };
+    //////////////////////////////////////////
+    case AUTH_ACTION_TYPES.UPDATE_ACCOUNT.IN_PROGRESS:
+      return {
+        ...state,
+        status: ACTION_STATUS.IN_PROGRESS,
+      };
+    case AUTH_ACTION_TYPES.UPDATE_ACCOUNT.SUCCESS:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          ...action.payload.data,
+        },
+        status: ACTION_STATUS.SUCCESS,
+      };
+    case AUTH_ACTION_TYPES.UPDATE_ACCOUNT.ERROR:
+      return {
+        ...state,
+        status: ACTION_STATUS.ERROR,
+        error: action.payload,
+      };
+    case AUTH_ACTION_TYPES.LOGOUT:
+      return {
+        ...state,
+        data: null,
+        status: ACTION_STATUS.NOT_STARTED,
+        error: '',
       };
     default:
       return state;

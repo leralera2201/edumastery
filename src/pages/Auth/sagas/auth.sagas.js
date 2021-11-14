@@ -2,7 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 
 import * as api from 'api/auth';
 import { notify } from 'utils/notifier';
-// import { setItem } from 'storage';
+import { setItem } from 'storage';
 import { AUTH_ACTION_TYPES } from '../actionTypes/auth.actionTypes';
 import * as actions from '../actions/auth.actions';
 
@@ -10,7 +10,7 @@ export function* loginUser({ payload: { data } }) {
   try {
     yield put(actions.loginUserInProgress());
     const response = yield call(api.login, data);
-    // setItem('X-AuthToken', token);
+    yield call(setItem, 'X-AuthToken', response.token);
     yield put(actions.loginUserSuccess(response));
   } catch (error) {
     yield call(notify, error?.text || '', 'danger');
@@ -38,11 +38,26 @@ export function* watchRegister() {
   yield takeLatest(AUTH_ACTION_TYPES.REGISTER.START, register);
 }
 
+export function* uodateAccount({ payload: { data } }) {
+  try {
+    yield put(actions.updateAccountInProgress());
+    const response = yield call(api.updateAccount, data);
+    yield put(actions.updateAccountSuccess(response));
+    yield call(notify, 'Account was updated successfully', 'success');
+  } catch (error) {
+    yield call(notify, error?.text || '', 'danger');
+    yield put(actions.updateAccountError(error?.text));
+  }
+}
+
+export function* watchUpdateAccount() {
+  yield takeLatest(AUTH_ACTION_TYPES.UPDATE_ACCOUNT.START, uodateAccount);
+}
+
 export function* forgotPassword({ payload: { data } }) {
   try {
     yield put(actions.forgotPasswordInProgress());
     const response = yield call(api.login, data);
-    console.log(response);
     // setItem('X-AuthToken', token);
     yield put(actions.forgotPasswordSuccess(response));
   } catch (error) {
