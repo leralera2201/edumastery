@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Login from 'pages/Auth/components/Login';
 import Registration from 'pages/Auth/components/Registration';
 import ForgotPassword from 'pages/Auth/components/ForgotPassword';
 import SetPassword from 'pages/Auth/components/SetPassword';
 import SetUserInfo from 'pages/Auth/components/SetUserInfo';
+import Profile from 'pages/Profile';
 import { getItem } from 'storage';
 import Loader from 'components/Loader';
+import NavBarButton from 'components/NavBarButton';
 import { logout } from 'pages/Auth/actions/auth.actions';
-import { replace } from 'utils/navigation';
+import { navigate, navigationRef, replace } from 'utils/navigation';
+import Config from 'config/colors';
+import { removeItem } from 'storage';
 
 function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -38,6 +43,33 @@ function HomeScreen({ navigation }) {
 }
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const HomeTabs = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    dispatch(logout());
+    await removeItem('X-AuthToken');
+    navigation.replace('Login');
+  };
+
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Config.secondary },
+        headerTitleStyle: { textTransform: 'uppercase' },
+        headerRight: () => (
+          <NavBarButton
+            onPress={handleLogout}
+            icon={require('./assets/logout.png')}
+          />
+        ),
+      }}>
+      <Tab.Screen name="Tests" component={HomeScreen} />
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  );
+};
 
 const App = () => {
   const [token, setToken] = useState('');
@@ -67,9 +99,18 @@ const App = () => {
     <>
       {loading && <Loader />}
       {!loading && (
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: Config.secondary },
+          }}>
           <Stack.Group>
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen
+              name="Home"
+              component={HomeTabs}
+              options={{
+                headerShown: false,
+              }}
+            />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Registration" component={Registration} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
