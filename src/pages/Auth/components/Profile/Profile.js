@@ -10,7 +10,7 @@ const Profile = ({ data }) => {
   const handleEdit = () => {};
 
   return (
-    <View>
+    <View style={styles.container}>
       <ImagePicker onEdit={handleEdit} imageSource={data?.photo} />
       <View style={styles.divider} />
       <View style={styles.wrapper}>
@@ -47,6 +47,10 @@ const Profile = ({ data }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Config.white,
+    height: '100%',
+  },
   divider: {
     borderBottomColor: Config.darkGray,
     borderBottomWidth: 1,
