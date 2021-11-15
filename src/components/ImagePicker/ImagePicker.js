@@ -8,14 +8,15 @@ import {
   Image,
 } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Config from 'config/colors';
 
-const ImagePicker = ({ imageSource, setImageSource }) => {
+const ImagePicker = ({ imageSource, setImageSource, onEdit }) => {
   const selectImage = () => {
     let options = {
-      maxWidth: 256,
-      maxHeight: 256,
+      maxWidth: 200,
+      maxHeight: 200,
       mediaType: 'photo',
       storageOptions: {
         skipBackup: true,
@@ -36,7 +37,7 @@ const ImagePicker = ({ imageSource, setImageSource }) => {
 
   return (
     <View style={styles.imageContainer}>
-      {imageSource === null ? (
+      {!imageSource ? (
         <Image
           source={require('../../assets/default-avatar.png')}
           style={styles.imageBox}
@@ -44,16 +45,27 @@ const ImagePicker = ({ imageSource, setImageSource }) => {
         />
       ) : (
         <Image
-          source={{ uri: imageSource.uri }}
+          source={{ uri: imageSource }}
           style={styles.imageBox}
           resizeMode="cover"
         />
       )}
-      <TouchableOpacity
-        onPress={selectImage}
-        style={[styles.selectButtonContainer]}>
-        <Text style={styles.selectButtonTitle}>Pick an image</Text>
-      </TouchableOpacity>
+      {onEdit && (
+        <TouchableOpacity onPress={onEdit} style={[styles.editButtonContainer]}>
+          <MaterialCommunityIcons
+            size={25}
+            name="pencil"
+            color={Config.secondary}
+          />
+        </TouchableOpacity>
+      )}
+      {setImageSource && (
+        <TouchableOpacity
+          onPress={selectImage}
+          style={[styles.selectButtonContainer]}>
+          <Text style={styles.selectButtonTitle}>Pick an image</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -67,6 +79,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
     backgroundColor: Config.secondary,
+  },
+  editButtonContainer: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
   },
   selectButtonTitle: {
     padding: 10,

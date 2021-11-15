@@ -6,5 +6,6 @@ export default {
   secondary,
   error: '#EE1111',
   lightGray: '#e9ebf2',
+  darkGray: '#525050',
   white: '#ffffff',
 };

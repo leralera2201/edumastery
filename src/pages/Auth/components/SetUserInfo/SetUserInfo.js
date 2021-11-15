@@ -99,7 +99,7 @@ const SetUserInfo = ({ status, updateAccount, navigation }) => {
       <View>
         {loading && <Loader />}
         <ImagePicker
-          imageSource={imageSource}
+          imageSource={imageSource?.uri}
           setImageSource={setImageSource}
         />
         <TextInput

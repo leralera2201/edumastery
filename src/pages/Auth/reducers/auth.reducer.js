@@ -107,6 +107,27 @@ const authReducer = (state = initialState, action) => {
         status: ACTION_STATUS.ERROR,
         error: action.payload,
       };
+    //////////////////////////////////////////
+    case AUTH_ACTION_TYPES.FETCH_ACCOUNT.IN_PROGRESS:
+      return {
+        ...state,
+        status: ACTION_STATUS.IN_PROGRESS,
+      };
+    case AUTH_ACTION_TYPES.FETCH_ACCOUNT.SUCCESS:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          ...action.payload.data,
+        },
+        status: ACTION_STATUS.SUCCESS,
+      };
+    case AUTH_ACTION_TYPES.FETCH_ACCOUNT.ERROR:
+      return {
+        ...state,
+        status: ACTION_STATUS.ERROR,
+        error: action.payload,
+      };
     case AUTH_ACTION_TYPES.LOGOUT:
       return {
         ...state,

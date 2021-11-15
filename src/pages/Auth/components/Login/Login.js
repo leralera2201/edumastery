@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Config from 'config/colors';
 import TextInput from 'components/TextInput';
 import Loader from 'components/Loader';
-import { ACTION_STATUS } from 'constants';
 import { isLoading } from 'utils/isLoading';
 import { loginUserStart } from '../../actions/auth.actions';
 import { getAuth, getAuthStatus } from '../../selectors/auth.selectors';
@@ -31,17 +30,6 @@ const Login = ({ navigation, status, login, data }) => {
       messages: [],
     },
   });
-
-  useEffect(() => {
-    if (status === ACTION_STATUS.SUCCESS) {
-      if (!data?.nickname) {
-        navigation.replace('SetUserInfo');
-      } else {
-        navigation.replace('Home');
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
 
   const handleBlur = (name) => {
     const messages = errors[name].validators

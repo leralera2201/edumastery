@@ -10,3 +10,5 @@ export const updateAccount = (data) =>
       'Content-Type': 'multipart/form-data',
     },
   });
+
+export const getAccount = (id) => client.get(`/api/user/${id}`);

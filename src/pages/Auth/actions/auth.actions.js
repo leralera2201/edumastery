@@ -106,4 +106,24 @@ export const updateAccountError = createAction(
   (error) => error,
 );
 
+//////////////////////////////////////////
+export const fetchAccountStart = createAction(
+  AUTH_ACTION_TYPES.FETCH_ACCOUNT.START,
+  (id) => ({ id }),
+);
+
+export const fetchAccountInProgress = createAction(
+  AUTH_ACTION_TYPES.FETCH_ACCOUNT.IN_PROGRESS,
+);
+
+export const fetchAccountSuccess = createAction(
+  AUTH_ACTION_TYPES.FETCH_ACCOUNT.SUCCESS,
+  (data) => ({ data }),
+);
+
+export const fetchAccountError = createAction(
+  AUTH_ACTION_TYPES.FETCH_ACCOUNT.ERROR,
+  (error) => error,
+);
+
 export const logout = createAction(AUTH_ACTION_TYPES.LOGOUT);

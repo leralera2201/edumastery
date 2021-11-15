@@ -5,6 +5,7 @@ import { notify } from 'utils/notifier';
 import { setItem } from 'storage';
 import { AUTH_ACTION_TYPES } from '../actionTypes/auth.actionTypes';
 import * as actions from '../actions/auth.actions';
+import { replace } from 'utils/navigation';
 
 export function* loginUser({ payload: { data } }) {
   try {
@@ -12,6 +13,7 @@ export function* loginUser({ payload: { data } }) {
     const response = yield call(api.login, data);
     yield call(setItem, 'X-AuthToken', response.token);
     yield put(actions.loginUserSuccess(response));
+    yield put(actions.fetchAccountStart(response.userId));
   } catch (error) {
     yield call(notify, error?.text || '', 'danger');
     yield put(actions.loginUserError(error.text));
@@ -38,7 +40,7 @@ export function* watchRegister() {
   yield takeLatest(AUTH_ACTION_TYPES.REGISTER.START, register);
 }
 
-export function* uodateAccount({ payload: { data } }) {
+export function* updateAccount({ payload: { data } }) {
   try {
     yield put(actions.updateAccountInProgress());
     const response = yield call(api.updateAccount, data);
@@ -51,7 +53,27 @@ export function* uodateAccount({ payload: { data } }) {
 }
 
 export function* watchUpdateAccount() {
-  yield takeLatest(AUTH_ACTION_TYPES.UPDATE_ACCOUNT.START, uodateAccount);
+  yield takeLatest(AUTH_ACTION_TYPES.UPDATE_ACCOUNT.START, updateAccount);
+}
+
+export function* fetchAccount({ payload: { id } }) {
+  try {
+    yield put(actions.fetchAccountInProgress());
+    const response = yield call(api.getAccount, id);
+    yield put(actions.fetchAccountSuccess(response));
+    if (!response?.nickname) {
+      yield call(replace, 'SetUserInfo');
+    } else {
+      yield call(replace, 'Home');
+    }
+  } catch (error) {
+    yield call(notify, error?.text || '', 'danger');
+    yield put(actions.fetchAccountError(error?.text));
+  }
+}
+
+export function* watchFetchAccount() {
+  yield takeLatest(AUTH_ACTION_TYPES.FETCH_ACCOUNT.START, fetchAccount);
 }
 
 export function* forgotPassword({ payload: { data } }) {

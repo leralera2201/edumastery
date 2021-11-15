@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Login from 'pages/Auth/components/Login';
 import Registration from 'pages/Auth/components/Registration';
 import ForgotPassword from 'pages/Auth/components/ForgotPassword';
 import SetPassword from 'pages/Auth/components/SetPassword';
 import SetUserInfo from 'pages/Auth/components/SetUserInfo';
-import Profile from 'pages/Profile';
+import Profile from 'pages/Auth/components/Profile';
 import { getItem } from 'storage';
 import Loader from 'components/Loader';
 import NavBarButton from 'components/NavBarButton';
 import { logout } from 'pages/Auth/actions/auth.actions';
-import { navigate, navigationRef, replace } from 'utils/navigation';
+import { replace } from 'utils/navigation';
 import Config from 'config/colors';
 import { removeItem } from 'storage';
 
-function HomeScreen({ navigation }) {
-  const dispatch = useDispatch();
+function HomeScreen() {
   const backgroundStyle = {
     flex: 1,
     alignItems: 'center',
@@ -27,17 +27,9 @@ function HomeScreen({ navigation }) {
     backgroundColor: '#fff',
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigation.replace('Login');
-  };
-
   return (
     <View style={backgroundStyle}>
       <Text>Home Screen</Text>
-      <TouchableOpacity onPress={handleLogout}>
-        <Text>handleLogout</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -65,8 +57,32 @@ const HomeTabs = ({ navigation }) => {
           />
         ),
       }}>
-      <Tab.Screen name="Tests" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen
+        name="Tests"
+        component={HomeScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: Config.secondary,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="book-open-variant"
+              color={color}
+              size={30}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: Config.secondary,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" color={color} size={30} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };
