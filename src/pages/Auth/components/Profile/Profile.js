@@ -1,13 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ImagePicker from 'components/ImagePicker';
 import Config from 'config/colors';
 import { getAuth } from 'pages/Auth/selectors/auth.selectors';
 
-const Profile = ({ data }) => {
-  const handleEdit = () => {};
+const Profile = ({ data, navigation }) => {
+  const handleEdit = () => {
+    navigation.navigate('EditProfile');
+  };
+
+  const handlePasswordChange = () => {
+    navigation.navigate('EditPassword');
+  };
 
   return (
     <View style={styles.container}>
@@ -33,13 +39,24 @@ const Profile = ({ data }) => {
             {data?.surname} {data?.name}
           </Text>
         </View>
-        <View style={styles.fieldContainer}>
+        <View style={[styles.fieldContainer, styles.fieldContainerBottomSpace]}>
           <MaterialCommunityIcons
             size={25}
             name="account-edit-outline"
             color={Config.secondary}
           />
           <Text style={styles.fieldText}>{data?.nickname}</Text>
+        </View>
+        <View style={styles.divider} />
+        <View style={[styles.fieldContainer, styles.fieldContainerPassword]}>
+          <MaterialCommunityIcons
+            size={25}
+            name="cog"
+            color={Config.secondary}
+          />
+          <TouchableOpacity onPress={handlePasswordChange}>
+            <Text style={styles.fieldText}>Change password</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -73,6 +90,12 @@ const styles = StyleSheet.create({
   fieldText: {
     fontSize: 20,
     marginLeft: 10,
+  },
+  fieldContainerBottomSpace: {
+    marginBottom: 20,
+  },
+  fieldContainerPassword: {
+    marginTop: 20,
   },
 });
 

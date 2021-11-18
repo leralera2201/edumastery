@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -11,7 +11,6 @@ import { name as appName } from './app.json';
 
 import axios from 'api/client';
 import { removeItem } from 'storage';
-import { replace } from 'utils/navigation';
 import { logout } from 'pages/Auth/actions/auth.actions';
 
 const Component = () => (
@@ -33,7 +32,7 @@ axios.interceptors.response.use(
       if (error.response.status === 401) {
         await removeItem('X-AuthToken');
         dispatch(logout());
-        replace('Login');
+        // replace('Login');
       }
       const throwableError = {
         code: error.response.status,

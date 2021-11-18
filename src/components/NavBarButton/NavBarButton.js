@@ -1,10 +1,12 @@
 import React from 'react';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Config from 'config/colors';
 
 const NavBarButton = ({ icon, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.iconWrapper}>
-      <Image source={icon} style={styles.icon} />
+      <MaterialCommunityIcons name="logout" size={25} color={Config.white} />
     </TouchableOpacity>
   );
 };
@@ -12,10 +14,6 @@ const NavBarButton = ({ icon, onPress }) => {
 const styles = StyleSheet.create({
   iconWrapper: {
     marginRight: 10,
-  },
-  icon: {
-    width: 20,
-    height: 20,
   },
 });
 

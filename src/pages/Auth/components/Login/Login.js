@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Config from 'config/colors';
@@ -15,7 +15,7 @@ import {
   validateForm,
 } from 'utils/validate';
 
-const Login = ({ navigation, status, login, data }) => {
+const Login = ({ navigation, status, login }) => {
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -24,10 +24,14 @@ const Login = ({ navigation, status, login, data }) => {
     email: {
       validators: [required, validateEmail],
       messages: [],
+      showError: false,
+      isFocused: false,
     },
     password: {
       validators: [required, minLength(6)],
       messages: [],
+      showError: false,
+      isFocused: false,
     },
   });
 
@@ -45,6 +49,7 @@ const Login = ({ navigation, status, login, data }) => {
         ...prevValues[name],
         showError: true,
         messages,
+        isFocused: false,
       },
     }));
   };
@@ -55,6 +60,7 @@ const Login = ({ navigation, status, login, data }) => {
       [name]: {
         ...prevValues[name],
         showError: false,
+        isFocused: true,
       },
     }));
   };
@@ -101,7 +107,10 @@ const Login = ({ navigation, status, login, data }) => {
       />
       <TextInput
         inputStyle={styles.textInput}
-        inputViewStyle={styles.inputView}
+        inputViewStyle={[
+          styles.inputView,
+          errors.email.isFocused && styles.inputViewFocused,
+        ]}
         placeholder="Email"
         placeholderTextColor="#003f5c"
         onChangeText={handleEmailChange}
@@ -115,7 +124,10 @@ const Login = ({ navigation, status, login, data }) => {
       />
       <TextInput
         inputStyle={styles.textInput}
-        inputViewStyle={styles.inputView}
+        inputViewStyle={[
+          styles.inputView,
+          errors.password.isFocused && styles.inputViewFocused,
+        ]}
         placeholder="Password"
         placeholderTextColor="#003f5c"
         secureTextEntry={true}
@@ -159,13 +171,15 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: Config.secondary,
-    borderRadius: 30,
+    borderRadius: 5,
+    borderColor: Config.darkGray,
+    borderWidth: 1,
     width: '70%',
     height: 45,
-    alignItems: 'center',
   },
-
+  inputViewFocused: {
+    borderColor: Config.secondary,
+  },
   textInput: {
     height: 50,
     flex: 1,
@@ -177,8 +191,8 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: '80%',
-    borderRadius: 25,
+    width: '70%',
+    borderRadius: 5,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',

@@ -2,10 +2,10 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 
 import * as api from 'api/auth';
 import { notify } from 'utils/notifier';
+import { navigate } from 'utils/navigation';
 import { setItem } from 'storage';
 import { AUTH_ACTION_TYPES } from '../actionTypes/auth.actionTypes';
 import * as actions from '../actions/auth.actions';
-import { replace } from 'utils/navigation';
 
 export function* loginUser({ payload: { data } }) {
   try {
@@ -61,10 +61,8 @@ export function* fetchAccount({ payload: { id } }) {
     yield put(actions.fetchAccountInProgress());
     const response = yield call(api.getAccount, id);
     yield put(actions.fetchAccountSuccess(response));
-    if (!response?.nickname) {
-      yield call(replace, 'SetUserInfo');
-    } else {
-      yield call(replace, 'Home');
+    if (!response.nickname) {
+      yield call(navigate, 'SetUserInfo');
     }
   } catch (error) {
     yield call(notify, error?.text || '', 'danger');

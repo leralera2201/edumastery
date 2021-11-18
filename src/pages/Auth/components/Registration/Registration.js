@@ -32,26 +32,31 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       validators: [required, validateEmail],
       messages: [],
       showError: false,
+      isFocused: false,
     },
     name: {
       validators: [required, minLength(2), maxLength(30)],
       messages: [],
       showError: false,
+      isFocused: false,
     },
     surname: {
       validators: [required, minLength(2), maxLength(30)],
       messages: [],
       showError: false,
+      isFocused: false,
     },
     password: {
       validators: [required, minLength(6)],
       messages: [],
       showError: false,
+      isFocused: false,
     },
     confirmPassword: {
       validators: [required],
       messages: [],
       showError: false,
+      isFocused: false,
     },
   });
 
@@ -59,12 +64,15 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
     if (status === ACTION_STATUS.SUCCESS) {
       navigation.replace('Login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
+  useEffect(() => {
     return () => {
       resetRegister();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, []);
 
   const loading = isLoading(status);
 
@@ -99,6 +107,7 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
         ...prevValues[name],
         showError: true,
         messages,
+        isFocused: false,
       },
     }));
   };
@@ -109,6 +118,7 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       [name]: {
         ...prevValues[name],
         showError: false,
+        isFocused: true,
       },
     }));
   };
@@ -182,7 +192,10 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       />
       <TextInput
         inputStyle={styles.textInput}
-        inputViewStyle={styles.inputView}
+        inputViewStyle={[
+          styles.inputView,
+          errors.email.isFocused && styles.inputViewFocused,
+        ]}
         placeholder="Email"
         placeholderTextColor="#003f5c"
         onChangeText={handleEmailChange}
@@ -196,7 +209,10 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       />
       <TextInput
         inputStyle={styles.textInput}
-        inputViewStyle={styles.inputView}
+        inputViewStyle={[
+          styles.inputView,
+          errors.name.isFocused && styles.inputViewFocused,
+        ]}
         placeholder="Name"
         placeholderTextColor="#003f5c"
         onChangeText={handleNameChange}
@@ -210,7 +226,10 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       />
       <TextInput
         inputStyle={styles.textInput}
-        inputViewStyle={styles.inputView}
+        inputViewStyle={[
+          styles.inputView,
+          errors.surname.isFocused && styles.inputViewFocused,
+        ]}
         placeholder="Surname"
         placeholderTextColor="#003f5c"
         onChangeText={handleSurnameChange}
@@ -224,7 +243,10 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       />
       <TextInput
         inputStyle={styles.textInput}
-        inputViewStyle={styles.inputView}
+        inputViewStyle={[
+          styles.inputView,
+          errors.password.isFocused && styles.inputViewFocused,
+        ]}
         placeholder="Password"
         placeholderTextColor="#003f5c"
         secureTextEntry={true}
@@ -239,7 +261,10 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       />
       <TextInput
         inputStyle={styles.textInput}
-        inputViewStyle={styles.inputView}
+        inputViewStyle={[
+          styles.inputView,
+          errors.confirmPassword.isFocused && styles.inputViewFocused,
+        ]}
         placeholder="Confirm password"
         placeholderTextColor="#003f5c"
         secureTextEntry={true}
@@ -283,13 +308,15 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: Config.secondary,
-    borderRadius: 30,
+    borderRadius: 5,
+    borderColor: Config.darkGray,
+    borderWidth: 1,
     width: '70%',
     height: 45,
-    alignItems: 'center',
   },
-
+  inputViewFocused: {
+    borderColor: Config.secondary,
+  },
   textInput: {
     height: 50,
     flex: 1,
@@ -301,8 +328,8 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: '80%',
-    borderRadius: 25,
+    width: '70%',
+    borderRadius: 5,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',

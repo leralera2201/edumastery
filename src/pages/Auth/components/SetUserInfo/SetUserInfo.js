@@ -25,12 +25,13 @@ const SetUserInfo = ({ status, updateAccount, navigation }) => {
       validators: [required, minLength(2), maxLength(30)],
       messages: [],
       showError: false,
+      isFocused: false,
     },
   });
 
   useEffect(() => {
     if (isSubmitted && status === ACTION_STATUS.SUCCESS) {
-      navigation.replace('Home');
+      navigation.goBack();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitted, status]);
@@ -58,6 +59,7 @@ const SetUserInfo = ({ status, updateAccount, navigation }) => {
         ...prevValues[name],
         showError: true,
         messages,
+        isFocused: false,
       },
     }));
   };
@@ -68,6 +70,7 @@ const SetUserInfo = ({ status, updateAccount, navigation }) => {
       [name]: {
         ...prevValues[name],
         showError: false,
+        isFocused: true,
       },
     }));
   };
@@ -104,7 +107,10 @@ const SetUserInfo = ({ status, updateAccount, navigation }) => {
         />
         <TextInput
           inputStyle={styles.textInput}
-          inputViewStyle={styles.inputView}
+          inputViewStyle={[
+            styles.inputView,
+            errors.nickname.isFocused && styles.inputViewFocused,
+          ]}
           placeholder="Nickname"
           placeholderTextColor="#003f5c"
           onChangeText={handleNicknameChange}
@@ -137,14 +143,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputView: {
-    backgroundColor: Config.secondary,
-    borderRadius: 30,
+    marginTop: 30,
+    borderRadius: 5,
+    borderColor: Config.darkGray,
+    borderWidth: 1,
     width: '70%',
     height: 45,
-    alignItems: 'center',
-    marginTop: 40,
   },
-
+  inputViewFocused: {
+    borderColor: Config.secondary,
+  },
   textInput: {
     height: 50,
     flex: 1,
@@ -152,8 +160,8 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: '80%',
-    borderRadius: 25,
+    width: '70%',
+    borderRadius: 5,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',

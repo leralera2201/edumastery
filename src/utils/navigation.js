@@ -16,3 +16,9 @@ export function replace(name) {
     navigationRef.dispatch(StackActions.replace(name));
   }
 }
+
+export function goBack() {
+  if (navigationRef.isReady()) {
+    navigationRef.goBack();
+  }
+}
