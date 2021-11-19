@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry, View } from 'react-native';
+import { AppRegistry } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';

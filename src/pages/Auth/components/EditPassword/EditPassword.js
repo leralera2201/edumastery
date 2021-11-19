@@ -52,7 +52,7 @@ const EditPassword = ({ data, navigation, status, updateAccount, error }) => {
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [values]);
 
   const handleSave = () => {
     const { newErrors, isValid } = validateForm(values, errors);

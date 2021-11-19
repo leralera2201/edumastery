@@ -13,12 +13,14 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         status: ACTION_STATUS.IN_PROGRESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.LOGIN_USER.SUCCESS:
       return {
         ...state,
         data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.LOGIN_USER.ERROR:
       return {
@@ -31,12 +33,14 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         status: ACTION_STATUS.IN_PROGRESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.REGISTER.SUCCESS:
       return {
         ...state,
         data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.REGISTER.ERROR:
       return {
@@ -48,19 +52,21 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         status: ACTION_STATUS.NOT_STARTED,
-        error: '',
+        error: null,
       };
     //////////////////////////////////////////
     case AUTH_ACTION_TYPES.FORGOT_PASSWORD.IN_PROGRESS:
       return {
         ...state,
         status: ACTION_STATUS.IN_PROGRESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.FORGOT_PASSWORD.SUCCESS:
       return {
         ...state,
         data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.FORGOT_PASSWORD.ERROR:
       return {
@@ -73,12 +79,14 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         status: ACTION_STATUS.IN_PROGRESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.SET_PASSWORD.SUCCESS:
       return {
         ...state,
         data: action.payload.data,
         status: ACTION_STATUS.SUCCESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.SET_PASSWORD.ERROR:
       return {
@@ -91,6 +99,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         status: ACTION_STATUS.IN_PROGRESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.UPDATE_ACCOUNT.SUCCESS:
       return {
@@ -99,6 +108,7 @@ const authReducer = (state = initialState, action) => {
           ...state.data,
           ...action.payload.data,
         },
+        error: null,
         status: ACTION_STATUS.SUCCESS,
       };
     case AUTH_ACTION_TYPES.UPDATE_ACCOUNT.ERROR:
@@ -112,6 +122,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         status: ACTION_STATUS.IN_PROGRESS,
+        error: null,
       };
     case AUTH_ACTION_TYPES.FETCH_ACCOUNT.SUCCESS:
       return {
@@ -120,6 +131,7 @@ const authReducer = (state = initialState, action) => {
           ...state.data,
           ...action.payload.data,
         },
+        error: null,
         status: ACTION_STATUS.SUCCESS,
       };
     case AUTH_ACTION_TYPES.FETCH_ACCOUNT.ERROR:
@@ -133,7 +145,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         data: null,
         status: ACTION_STATUS.NOT_STARTED,
-        error: '',
+        error: null,
       };
     default:
       return state;

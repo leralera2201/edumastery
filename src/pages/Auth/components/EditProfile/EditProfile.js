@@ -27,10 +27,10 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
   const [imageSource, setImageSource] = useState();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [values, setValues] = useState({
-    email: data?.email,
-    name: data?.name,
-    surname: data?.surname,
-    nickname: data?.nickname,
+    email: '',
+    name: '',
+    surname: '',
+    nickname: '',
   });
   const [errors, setErrors] = useState({
     email: {
@@ -75,7 +75,16 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [values]);
+
+  useEffect(() => {
+    setValues({
+      email: data?.email,
+      name: data?.name,
+      surname: data?.surname,
+      nickname: data?.nickname,
+    });
+  }, [data]);
 
   const handleSave = () => {
     const { newErrors, isValid } = validateForm(values, errors);

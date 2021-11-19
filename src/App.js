@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -98,7 +98,7 @@ const ProfileStack = () => {
   );
 };
 
-const HomeTabs = ({ navigation }) => {
+const HomeTabs = () => {
   const dispatch = useDispatch();
   const handleLogout = async () => {
     dispatch(logout());
@@ -112,12 +112,22 @@ const HomeTabs = ({ navigation }) => {
         headerTitleStyle: { color: Config.white, textTransform: 'uppercase' },
         tabBarShowLabel: false,
         tabBarActiveTintColor: Config.secondary,
-        headerRight: () => <NavBarButton onPress={handleLogout} />,
       }}>
       <Tab.Screen
         name="Tests"
         component={HomeScreen}
         options={{
+          headerRight: () => (
+            <View style={styles.icons}>
+              <MaterialCommunityIcons
+                name="filter-outline"
+                size={25}
+                color={Config.white}
+                style={styles.filterIcon}
+              />
+              <NavBarButton onPress={handleLogout} />
+            </View>
+          ),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="book-open-variant"
@@ -131,6 +141,7 @@ const HomeTabs = ({ navigation }) => {
         name="ProfileStack"
         component={ProfileStack}
         options={{
+          headerRight: () => <NavBarButton onPress={handleLogout} />,
           title: 'Profile',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={30} />
@@ -140,6 +151,16 @@ const HomeTabs = ({ navigation }) => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  icons: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  filterIcon: {
+    marginRight: 15,
+  },
+});
 
 const App = () => {
   const [loading, setLoading] = useState(true);
