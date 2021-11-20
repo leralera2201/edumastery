@@ -1,12 +1,48 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, VirtualizedList } from 'react-native';
 
-const TestsFilter = () => {
+import Divider from 'components/Divider';
+
+import { tests } from '../../dummyData';
+import TestItem from './TestItem';
+
+const total = 2;
+
+const Tests = () => {
+  const onPress = () => {};
+  const renderItem = ({ item }) => {
+    return (
+      <TestItem
+        title={item.name}
+        categoryName={item.categoryName}
+        onPress={onPress}
+        difficulty={item.difficulty}
+      />
+    );
+  };
+
+  const getItem = (data, index) => {
+    return data[index];
+  };
+
+  const onEndReached = () => {};
+  const onRefresh = () => {};
+
   return (
     <View>
-      <Text>tests</Text>
+      <VirtualizedList
+        data={tests}
+        keyExtractor={(item) => item._id}
+        renderItem={renderItem}
+        getItem={getItem}
+        ItemSeparatorComponent={Divider}
+        onEndReached={onEndReached}
+        onRefresh={onRefresh}
+        refreshing={false}
+        getItemCount={() => 2}
+      />
     </View>
   );
 };
 
-export default TestsFilter;
+export default Tests;

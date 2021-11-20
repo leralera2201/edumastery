@@ -22,6 +22,7 @@ import { isLoading } from 'utils/isLoading';
 import Loader from 'components/Loader';
 import { updateAccountStart } from 'pages/Auth/actions/auth.actions';
 import { ACTION_STATUS } from 'constants';
+import Divider from 'components/Divider';
 
 const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
   const [imageSource, setImageSource] = useState();
@@ -176,7 +177,7 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
         setImageSource={setImageSource}
         imageSource={imageSource?.uri}
       />
-      <View style={styles.divider} />
+      <Divider />
       <View style={styles.wrapper}>
         {!!error && (
           <View>
@@ -267,10 +268,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     marginHorizontal: 10,
-  },
-  divider: {
-    borderBottomColor: Config.darkGray,
-    borderBottomWidth: 1,
   },
   wrapperText: {
     fontSize: 20,

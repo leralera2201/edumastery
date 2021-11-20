@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ImagePicker from 'components/ImagePicker';
+import Divider from 'components/Divider';
 import Config from 'config/colors';
 import { getAuth } from 'pages/Auth/selectors/auth.selectors';
 
@@ -18,7 +19,7 @@ const Profile = ({ data, navigation }) => {
   return (
     <View style={styles.container}>
       <ImagePicker onEdit={handleEdit} imageSource={data?.photo} />
-      <View style={styles.divider} />
+      <Divider />
       <View style={styles.wrapper}>
         <Text style={styles.wrapperText}>Your personal data:</Text>
         <View style={styles.fieldContainer}>
@@ -47,7 +48,7 @@ const Profile = ({ data, navigation }) => {
           />
           <Text style={styles.fieldText}>{data?.nickname}</Text>
         </View>
-        <View style={styles.divider} />
+        <Divider />
         <View style={[styles.fieldContainer, styles.fieldContainerPassword]}>
           <MaterialCommunityIcons
             size={25}
@@ -67,10 +68,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Config.white,
     height: '100%',
-  },
-  divider: {
-    borderBottomColor: Config.darkGray,
-    borderBottomWidth: 1,
   },
   wrapperText: {
     fontSize: 20,

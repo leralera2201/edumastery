@@ -217,10 +217,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 10,
   },
-  divider: {
-    borderBottomColor: Config.darkGray,
-    borderBottomWidth: 1,
-  },
   wrapperText: {
     fontSize: 20,
     marginHorizontal: 10,

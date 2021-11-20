@@ -6,6 +6,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import Device from 'device';
 import TextInput from 'components/TextInput';
 import RadioButton from 'components/RadioButton';
+import Divider from 'components/Divider';
 import Config from 'config/colors';
 
 import { categories } from '../../dummyData';
@@ -103,7 +104,7 @@ const TestsFilter = ({ navigation }) => {
         onBlur={() => handleBlur('search')}
         onFocus={() => handleFocus('search')}
       />
-      <View style={styles.divider} />
+      <Divider />
       <View style={styles.selectWrapper}>
         <RNPickerSelect
           placeholder={placeholder}
@@ -116,7 +117,7 @@ const TestsFilter = ({ navigation }) => {
           }))}
         />
       </View>
-      <View style={styles.divider} />
+      <Divider />
       <View style={styles.radioWrapper}>
         <RadioButton
           title="Beginner"
@@ -190,10 +191,6 @@ const styles = StyleSheet.create({
   radioWrapper: {
     marginVertical: 10,
     marginHorizontal: 20,
-  },
-  divider: {
-    borderBottomColor: Config.darkGray,
-    borderBottomWidth: 1,
   },
   inputView: {
     borderRadius: 5,
