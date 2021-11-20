@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNPickerSelect from 'react-native-picker-select';
 
 import Device from 'device';
+import {
+  applyFilter,
+  fetchTestsStart,
+} from 'pages/Tests/actions/tests.actions';
+import { getTestsStatus } from 'pages/Tests/selectors/tests.selectors';
 import TextInput from 'components/TextInput';
 import RadioButton from 'components/RadioButton';
 import Divider from 'components/Divider';
+import Loader from 'components/Loader';
 import Config from 'config/colors';
+import { isLoading } from 'utils/isLoading';
 
 import { categories } from '../../dummyData';
 
-const TestsFilter = ({ navigation }) => {
+const TestsFilter = ({ navigation, filterTests, status, fetchTests }) => {
   const [values, setValues] = useState({
     search: '',
     difficulty: {
@@ -37,9 +45,17 @@ const TestsFilter = ({ navigation }) => {
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [values]);
 
   const handleFilter = () => {
+    filterTests({
+      searchWord: values.search,
+      categoryId: values.category,
+      difficulties: Object.keys(values.difficulty)
+        .filter((item) => !!values.difficulty[item])
+        .map((dif) => +dif),
+    });
+    fetchTests({ page: 1 });
     navigation.goBack();
   };
 
@@ -86,8 +102,11 @@ const TestsFilter = ({ navigation }) => {
     value: null,
   };
 
+  const loading = isLoading(status);
+
   return (
     <View style={styles.wrapper}>
+      {loading && <Loader />}
       <TextInput
         inputStyle={styles.textInput}
         inputViewStyle={[
@@ -209,4 +228,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TestsFilter;
+const mapStateToProps = (state) => ({
+  status: getTestsStatus(state),
+});
+
+const mapDispatchToProps = {
+  filterTests: applyFilter,
+  fetchTests: fetchTestsStart,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TestsFilter);
