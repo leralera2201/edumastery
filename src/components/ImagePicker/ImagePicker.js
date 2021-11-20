@@ -39,7 +39,7 @@ const ImagePicker = ({ imageSource, setImageSource, onEdit }) => {
     <View style={styles.imageContainer}>
       {!imageSource ? (
         <Image
-          source={require('../../assets/default-avatar.png')}
+          source={require('assets/default-avatar.png')}
           style={styles.imageBox}
           resizeMode="cover"
         />

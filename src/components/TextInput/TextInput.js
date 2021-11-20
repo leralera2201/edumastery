@@ -7,8 +7,8 @@ const Input = ({ errors, inputViewStyle, inputStyle, ...props }) => (
     <View style={inputViewStyle}>
       <TextInput style={inputStyle} {...props} />
     </View>
-    <View style={errors.length ? styles.errorWrapper : styles.extraSpace}>
-      {!!errors.length && <Text style={styles.error}>{errors[0]}</Text>}
+    <View style={errors?.length ? styles.errorWrapper : styles.extraSpace}>
+      {!!errors?.length && <Text style={styles.error}>{errors[0]}</Text>}
     </View>
   </View>
 );

@@ -12,32 +12,62 @@ import SetPassword from 'pages/Auth/components/SetPassword';
 import SetUserInfo from 'pages/Auth/components/SetUserInfo';
 import Profile from 'pages/Auth/components/Profile';
 import EditProfile from 'pages/Auth/components/EditProfile';
-import Loader from 'components/Loader';
-import NavBarButton from 'components/NavBarButton';
-import { logout } from 'pages/Auth/actions/auth.actions';
-import { goBack } from 'utils/navigation';
-import Config from 'config/colors';
-import { removeItem } from 'storage';
 import { getAuth } from 'pages/Auth/selectors/auth.selectors';
 import EditPassword from 'pages/Auth/components/EditPassword';
+import { logout } from 'pages/Auth/actions/auth.actions';
+import Tests from 'pages/Tests/components/Tests';
+import TestsFilter from 'pages/Tests/components/TestsFilter';
+import Loader from 'components/Loader';
+import NavBarButton from 'components/NavBarButton';
+import Config from 'config/colors';
+import { goBack, navigate } from 'utils/navigation';
+import { removeItem } from 'storage';
 
 function HomeScreen() {
-  const backgroundStyle = {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+  const handleGoBack = () => {
+    goBack();
   };
 
   return (
-    <View style={backgroundStyle}>
-      <Text>Home Screen</Text>
-    </View>
+    <StackHome.Navigator>
+      <StackHome.Group
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <StackHome.Screen name="Tests" component={Tests} />
+      </StackHome.Group>
+      <StackHome.Group
+        screenOptions={{
+          presentation: 'fullScreenModal',
+          headerStyle: {
+            backgroundColor: Config.secondary,
+          },
+          headerTitleStyle: { color: Config.white },
+        }}>
+        <StackHome.Screen
+          name="TestsFilter"
+          component={TestsFilter}
+          options={{
+            title: 'FILTER',
+            headerLeft: () => (
+              <TouchableOpacity onPress={handleGoBack}>
+                <MaterialCommunityIcons
+                  name="close"
+                  size={25}
+                  color={Config.white}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+      </StackHome.Group>
+    </StackHome.Navigator>
   );
 }
 
 const Stack = createNativeStackNavigator();
 const StackProfile = createNativeStackNavigator();
+const StackHome = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const ProfileStack = () => {
@@ -105,6 +135,10 @@ const HomeTabs = () => {
     await removeItem('X-AuthToken');
   };
 
+  const handleNavigate = () => {
+    navigate('TestsFilter');
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -114,17 +148,20 @@ const HomeTabs = () => {
         tabBarActiveTintColor: Config.secondary,
       }}>
       <Tab.Screen
-        name="Tests"
+        name="HomeScreen"
         component={HomeScreen}
         options={{
+          title: 'Tests',
           headerRight: () => (
             <View style={styles.icons}>
-              <MaterialCommunityIcons
-                name="filter-outline"
-                size={25}
-                color={Config.white}
-                style={styles.filterIcon}
-              />
+              <TouchableOpacity onPress={handleNavigate}>
+                <MaterialCommunityIcons
+                  name="filter-outline"
+                  size={25}
+                  color={Config.white}
+                  style={styles.filterIcon}
+                />
+              </TouchableOpacity>
               <NavBarButton onPress={handleLogout} />
             </View>
           ),

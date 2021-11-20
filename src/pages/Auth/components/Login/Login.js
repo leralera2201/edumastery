@@ -103,7 +103,7 @@ const Login = ({ navigation, status, login }) => {
       <Image
         resizeMode="contain"
         style={styles.image}
-        source={require('assets/logo.png')}
+        source={require('assets/Edumastery.png')}
       />
       <TextInput
         inputStyle={styles.textInput}
@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: Device.width,
     maxHeight: 200,
+    marginBottom: 50,
   },
 
   inputView: {

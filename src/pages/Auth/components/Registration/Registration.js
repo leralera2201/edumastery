@@ -188,7 +188,7 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       <Image
         resizeMode="contain"
         style={styles.image}
-        source={require('assets/logo.png')}
+        source={require('assets/Edumastery.png')}
       />
       <TextInput
         inputStyle={styles.textInput}
@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    paddingVertical: 20,
   },
 
   image: {
@@ -305,6 +306,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: Device.width,
     maxHeight: 200,
+    marginBottom: 30,
   },
 
   inputView: {
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40,
+    marginTop: 30,
     marginBottom: 20,
     backgroundColor: Config.primary,
   },
