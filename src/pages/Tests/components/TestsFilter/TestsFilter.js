@@ -9,7 +9,12 @@ import {
   applyFilter,
   fetchTestsStart,
 } from 'pages/Tests/actions/tests.actions';
-import { getTestsStatus } from 'pages/Tests/selectors/tests.selectors';
+import {
+  getCategories,
+  getCategoriesStatus,
+  getTestsStatus,
+} from 'pages/Tests/selectors/tests.selectors';
+import { fetchCategoriesStart } from 'pages/Tests/actions/categories.actions';
 import TextInput from 'components/TextInput';
 import RadioButton from 'components/RadioButton';
 import Divider from 'components/Divider';
@@ -17,9 +22,15 @@ import Loader from 'components/Loader';
 import Config from 'config/colors';
 import { isLoading } from 'utils/isLoading';
 
-import { categories } from '../../dummyData';
-
-const TestsFilter = ({ navigation, filterTests, status, fetchTests }) => {
+const TestsFilter = ({
+  navigation,
+  filterTests,
+  status,
+  fetchTests,
+  fetchCategories,
+  categories,
+  categoriesStatus,
+}) => {
   const [values, setValues] = useState({
     search: '',
     difficulty: {
@@ -35,6 +46,11 @@ const TestsFilter = ({ navigation, filterTests, status, fetchTests }) => {
   const [focused, setFocused] = useState({
     search: false,
   });
+
+  useEffect(() => {
+    fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -102,7 +118,7 @@ const TestsFilter = ({ navigation, filterTests, status, fetchTests }) => {
     value: null,
   };
 
-  const loading = isLoading(status);
+  const loading = isLoading(status, categoriesStatus);
 
   return (
     <View style={styles.wrapper}>
@@ -230,11 +246,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   status: getTestsStatus(state),
+  categories: getCategories(state),
+  categoriesStatus: getCategoriesStatus(state),
 });
 
 const mapDispatchToProps = {
   filterTests: applyFilter,
   fetchTests: fetchTestsStart,
+  fetchCategories: fetchCategoriesStart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TestsFilter);
