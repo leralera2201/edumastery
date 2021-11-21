@@ -16,7 +16,7 @@ import { isLoading } from 'utils/isLoading';
 import TestItem from './TestItem';
 import Loader from 'components/Loader';
 
-const Tests = ({ tests, fetchTests, filter, status, total }) => {
+const Tests = ({ tests, fetchTests, filter, status, total, navigation }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   useEffect(() => {
     fetchTests({ page: 1 });
@@ -29,13 +29,17 @@ const Tests = ({ tests, fetchTests, filter, status, total }) => {
     }
   }, [isRefreshing, status]);
 
-  const onPress = () => {};
+  const onPress = (test) => {
+    navigation.push('TestDetails', {
+      test,
+    });
+  };
   const renderItem = ({ item }) => {
     return (
       <TestItem
         title={item.name}
         categoryName={item.categoryName}
-        onPress={onPress}
+        onPress={() => onPress(item)}
         difficulty={item.difficulty}
       />
     );

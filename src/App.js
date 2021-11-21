@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,6 +17,9 @@ import EditPassword from 'pages/Auth/components/EditPassword';
 import { logout } from 'pages/Auth/actions/auth.actions';
 import Tests from 'pages/Tests/components/Tests';
 import TestsFilter from 'pages/Tests/components/TestsFilter';
+import TestDetails from 'pages/Tests/components/TestDetails';
+import MyTests from 'pages/Tests/components/MyTests';
+import TestCompleting from 'pages/Tests/components/TestCompleting';
 import Loader from 'components/Loader';
 import NavBarButton from 'components/NavBarButton';
 import Config from 'config/colors';
@@ -24,17 +27,65 @@ import { goBack, navigate } from 'utils/navigation';
 import { removeItem } from 'storage';
 
 function HomeScreen() {
+  const dispatch = useDispatch();
   const handleGoBack = () => {
     goBack();
+  };
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    await removeItem('X-AuthToken');
+  };
+
+  const handleNavigate = () => {
+    navigate('TestsFilter');
   };
 
   return (
     <StackHome.Navigator>
       <StackHome.Group
         screenOptions={{
-          headerShown: false,
+          headerStyle: {
+            backgroundColor: Config.secondary,
+          },
+          headerTitleStyle: { color: Config.white },
         }}>
-        <StackHome.Screen name="Tests" component={Tests} />
+        <StackHome.Screen
+          name="Tests"
+          component={Tests}
+          options={{
+            title: 'Tests',
+            headerRight: () => (
+              <View style={styles.icons}>
+                <TouchableOpacity onPress={handleNavigate}>
+                  <MaterialCommunityIcons
+                    name="filter-outline"
+                    size={25}
+                    color={Config.white}
+                    style={styles.filterIcon}
+                  />
+                </TouchableOpacity>
+                <NavBarButton onPress={handleLogout} />
+              </View>
+            ),
+          }}
+        />
+        <StackHome.Screen
+          name="TestDetails"
+          component={TestDetails}
+          options={{
+            title: 'Test Details',
+            headerLeft: () => (
+              <TouchableOpacity onPress={handleGoBack}>
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  size={25}
+                  color={Config.white}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </StackHome.Group>
       <StackHome.Group
         screenOptions={{
@@ -48,7 +99,23 @@ function HomeScreen() {
           name="TestsFilter"
           component={TestsFilter}
           options={{
-            title: 'FILTER',
+            title: 'Filter',
+            headerLeft: () => (
+              <TouchableOpacity onPress={handleGoBack}>
+                <MaterialCommunityIcons
+                  name="close"
+                  size={25}
+                  color={Config.white}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <StackHome.Screen
+          name="TestCompleting"
+          component={TestCompleting}
+          options={{
+            title: 'Test',
             headerLeft: () => (
               <TouchableOpacity onPress={handleGoBack}>
                 <MaterialCommunityIcons
@@ -66,20 +133,32 @@ function HomeScreen() {
 }
 
 const Stack = createNativeStackNavigator();
+const StackHistory = createNativeStackNavigator();
 const StackProfile = createNativeStackNavigator();
 const StackHome = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const ProfileStack = () => {
+  const dispatch = useDispatch();
   const handleGoBack = () => {
     goBack();
+  };
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    await removeItem('X-AuthToken');
   };
 
   return (
     <StackProfile.Navigator>
       <StackProfile.Group
         screenOptions={{
-          headerShown: false,
+          headerRight: () => <NavBarButton onPress={handleLogout} />,
+          title: 'Profile',
+          headerStyle: { backgroundColor: Config.secondary },
+          headerTitleStyle: {
+            color: Config.white,
+          },
         }}>
         <StackProfile.Screen name="Profile" component={Profile} />
       </StackProfile.Group>
@@ -128,43 +207,43 @@ const ProfileStack = () => {
   );
 };
 
-const HomeTabs = () => {
+const HistoryStack = () => {
   const dispatch = useDispatch();
+
   const handleLogout = async () => {
     dispatch(logout());
     await removeItem('X-AuthToken');
   };
 
-  const handleNavigate = () => {
-    navigate('TestsFilter');
-  };
+  return (
+    <StackHistory.Navigator>
+      <StackHistory.Group
+        screenOptions={{
+          headerRight: () => <NavBarButton onPress={handleLogout} />,
+          title: 'History',
+          headerStyle: { backgroundColor: Config.secondary },
+          headerTitleStyle: {
+            color: Config.white,
+          },
+        }}>
+        <StackHistory.Screen name="History" component={MyTests} />
+      </StackHistory.Group>
+    </StackHistory.Navigator>
+  );
+};
 
+const HomeTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: Config.secondary },
-        headerTitleStyle: { color: Config.white, textTransform: 'uppercase' },
         tabBarShowLabel: false,
         tabBarActiveTintColor: Config.secondary,
+        headerShown: false,
       }}>
       <Tab.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={{
-          title: 'Tests',
-          headerRight: () => (
-            <View style={styles.icons}>
-              <TouchableOpacity onPress={handleNavigate}>
-                <MaterialCommunityIcons
-                  name="filter-outline"
-                  size={25}
-                  color={Config.white}
-                  style={styles.filterIcon}
-                />
-              </TouchableOpacity>
-              <NavBarButton onPress={handleLogout} />
-            </View>
-          ),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="book-open-variant"
@@ -175,11 +254,22 @@ const HomeTabs = () => {
         }}
       />
       <Tab.Screen
+        name="MyTests"
+        component={HistoryStack}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="folder-account"
+              color={color}
+              size={30}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="ProfileStack"
         component={ProfileStack}
         options={{
-          headerRight: () => <NavBarButton onPress={handleLogout} />,
-          title: 'Profile',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={30} />
           ),
@@ -211,13 +301,6 @@ const App = () => {
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
-
-  // useEffect(() => {
-  //   if (!loading && !token) {
-  //     replace('Login');
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [loading]);
 
   return (
     <>

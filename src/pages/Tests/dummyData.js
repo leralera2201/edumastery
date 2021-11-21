@@ -29,7 +29,7 @@ export const tests = [
             text: 'Vika',
           },
           {
-            isCorrecct: false,
+            isCorrecct: true,
             _id: '6198f7b3c041073ed010c89e',
             text: 'Oleh',
           },
@@ -51,9 +51,9 @@ export const tests = [
             text: 'Vika',
           },
           {
-            isCorrecct: false,
+            isCorrecct: true,
             _id: '6198f7b3c041073ed010c8a1',
-            text: 'Oleh',
+            text: 'Halya',
           },
         ],
         _id: '6198f7b3c041073ed010c8a9',
@@ -102,7 +102,7 @@ export const tests = [
           {
             isCorrecct: false,
             _id: '6198f7b3c041073ed010c8a0',
-            text: 'Vika',
+            text: 'Halya',
           },
           {
             isCorrecct: false,

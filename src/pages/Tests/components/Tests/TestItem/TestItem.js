@@ -2,14 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 
 import Config from 'config/colors';
-
-const difficultyObj = {
-  1: 'Beginner',
-  2: 'Easy',
-  3: 'Normal',
-  4: 'Hard',
-  5: 'Extremely hard',
-};
+import { difficultyObj } from 'constants';
 
 const TestItem = ({ onPress, title, difficulty, categoryName }) => {
   return (

@@ -66,7 +66,6 @@ const Profile = ({ data, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Config.white,
     height: '100%',
   },
   wrapperText: {

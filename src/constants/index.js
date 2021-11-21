@@ -6,3 +6,11 @@ export const ACTION_STATUS = {
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS',
 };
+
+export const difficultyObj = {
+  1: 'Beginner',
+  2: 'Easy',
+  3: 'Normal',
+  4: 'Hard',
+  5: 'Extremely hard',
+};
