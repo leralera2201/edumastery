@@ -17,7 +17,7 @@ const TestDetails = ({ route, navigation }) => {
         <Text style={styles.title}>{test.name}</Text>
         <View style={styles.flex}>
           <Text style={styles.text}>Category:</Text>
-          <Text style={styles.subtitle}>{test.categoryName}</Text>
+          <Text style={styles.subtitle}>{test.category.name}</Text>
         </View>
         <View style={styles.flex}>
           <Text style={styles.text}>Difficulty:</Text>

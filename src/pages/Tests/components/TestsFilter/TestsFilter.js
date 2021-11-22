@@ -12,6 +12,7 @@ import {
 import {
   getCategories,
   getCategoriesStatus,
+  getTestsFilter,
   getTestsStatus,
 } from 'pages/Tests/selectors/tests.selectors';
 import { fetchCategoriesStart } from 'pages/Tests/actions/categories.actions';
@@ -22,6 +23,8 @@ import Loader from 'components/Loader';
 import Config from 'config/colors';
 import { isLoading } from 'utils/isLoading';
 
+const diff = [1, 2, 3, 4, 5];
+
 const TestsFilter = ({
   navigation,
   filterTests,
@@ -30,6 +33,7 @@ const TestsFilter = ({
   fetchCategories,
   categories,
   categoriesStatus,
+  filter,
 }) => {
   const [values, setValues] = useState({
     search: '',
@@ -42,6 +46,35 @@ const TestsFilter = ({
     },
     category: '',
   });
+
+  useEffect(() => {
+    const newFilter = {};
+
+    if (filter.searchWord) {
+      newFilter.search = filter.searchWord;
+    }
+    if (filter.categoryId) {
+      newFilter.category = filter.categoryId;
+    }
+    if (filter.difficulties) {
+      const difference = diff.filter(
+        (item) => !filter.difficulties.includes(item),
+      );
+      const falsyValues = difference.reduce((acc, curVal) => {
+        acc[curVal] = false;
+        return acc;
+      }, {});
+      const truthValues = filter.difficulties.reduce((acc, curVal) => {
+        acc[curVal] = true;
+        return acc;
+      }, {});
+      newFilter.difficulty = {
+        ...falsyValues,
+        ...truthValues,
+      };
+    }
+    Object.keys(newFilter).length && setValues(newFilter);
+  }, [filter]);
 
   const [focused, setFocused] = useState({
     search: false,
@@ -148,7 +181,7 @@ const TestsFilter = ({
           onValueChange={handleCategoryChange}
           items={categories.map((category) => ({
             label: category.name,
-            value: category.id,
+            value: category._id,
           }))}
         />
       </View>
@@ -248,6 +281,7 @@ const mapStateToProps = (state) => ({
   status: getTestsStatus(state),
   categories: getCategories(state),
   categoriesStatus: getCategoriesStatus(state),
+  filter: getTestsFilter(state),
 });
 
 const mapDispatchToProps = {

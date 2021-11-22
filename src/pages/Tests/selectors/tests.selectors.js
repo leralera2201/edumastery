@@ -19,7 +19,7 @@ export const getCategories = createSelector(
 export const getTests = createSelector(getTestsState, ({ data }) => data.items);
 
 export const getCategoriesStatus = createSelector(
-  getCategories,
+  getCategoriesState,
   ({ status }) => status,
 );
 

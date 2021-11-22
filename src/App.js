@@ -116,15 +116,6 @@ function HomeScreen() {
           component={TestCompleting}
           options={{
             title: 'Test',
-            headerLeft: () => (
-              <TouchableOpacity onPress={handleGoBack}>
-                <MaterialCommunityIcons
-                  name="close"
-                  size={25}
-                  color={Config.white}
-                />
-              </TouchableOpacity>
-            ),
           }}
         />
       </StackHome.Group>
@@ -174,7 +165,7 @@ const ProfileStack = () => {
           name="EditProfile"
           component={EditProfile}
           options={{
-            title: 'EDIT PROFILE',
+            title: 'Edit Profile',
             headerLeft: () => (
               <TouchableOpacity onPress={handleGoBack}>
                 <MaterialCommunityIcons
@@ -190,7 +181,7 @@ const ProfileStack = () => {
           name="EditPassword"
           component={EditPassword}
           options={{
-            title: 'CHANGE PASSWORD',
+            title: 'Change password',
             headerLeft: () => (
               <TouchableOpacity onPress={handleGoBack}>
                 <MaterialCommunityIcons

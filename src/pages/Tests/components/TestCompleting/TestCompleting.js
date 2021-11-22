@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -12,6 +12,25 @@ const TestCompleting = ({ route, navigation }) => {
   const { test } = route.params;
   const hasNext = test.questions.length > step;
   const activeQuestion = test.questions[step - 1];
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity onPress={isSubmitted ? handlePop : handleGoBack}>
+          <MaterialCommunityIcons name="close" size={25} color={Config.white} />
+        </TouchableOpacity>
+      ),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSubmitted]);
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  const handlePop = () => {
+    navigation.popToTop();
+  };
 
   const handlePress = () => {
     if (!values[activeQuestion._id]) {
@@ -48,7 +67,7 @@ const TestCompleting = ({ route, navigation }) => {
     const answer = question.answers.find(
       (answer) => answer._id === values[key],
     );
-    const mark = answer.isCorrecct ? question.mark : 0;
+    const mark = answer.isCorrect ? question.mark : 0;
     return { questionText: question.text, answerText: answer.text, mark };
   });
 

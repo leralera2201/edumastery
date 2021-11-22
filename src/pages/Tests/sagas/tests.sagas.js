@@ -1,27 +1,39 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 
-// import * as api from 'api/tests';
+import * as api from 'api/tests';
 import { notify } from 'utils/notifier';
 import { TESTS_ACTION_TYPES } from '../actionTypes/tests.actionTypes';
 import * as actions from '../actions/tests.actions';
 import { getTestsFilter } from '../selectors/tests.selectors';
-
-import { tests } from '../dummyData';
 
 export function* fetchTests({ payload: { params } }) {
   try {
     yield put(actions.fetchTestsInProgress());
     const filter = yield select(getTestsFilter);
     const newFilter = {
-      ...filter,
-      ...params,
+      pageSize: params.pageSize || filter.pageSize,
+      page: params.page || filter.page,
     };
-    console.log(newFilter);
-    // const response = yield call(api.login, data);
-    const response = tests;
+
+    if (filter.difficulties?.length) {
+      newFilter.difficulties = JSON.stringify(filter.difficulties);
+    }
+
+    if (filter.categoryId) {
+      newFilter.categoryId = filter.categoryId;
+    }
+
+    if (filter.searchWord) {
+      newFilter.searchWord = filter.searchWord;
+    }
+
+    const response = yield call(api.getTests, newFilter);
     yield put(
       actions.fetchTestsSuccess(
-        { items: response, total: response.length },
+        {
+          items: response.items,
+          total: response.items.length,
+        },
         params,
       ),
     );
