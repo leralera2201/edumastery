@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Config from 'config/colors';
 import RadioButton from 'components/RadioButton';
+import { getTestResultStatus } from 'pages/Tests/selectors/tests.selectors';
+import { createTestResultStart } from 'pages/Tests/actions/tests.actions';
+import { isLoading } from 'utils/isLoading';
+import Loader from 'components/Loader';
 
-const TestCompleting = ({ route, navigation }) => {
+const TestCompleting = ({ route, navigation, createTestResult, status }) => {
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [values, setValues] = useState({});
@@ -49,8 +54,12 @@ const TestCompleting = ({ route, navigation }) => {
   };
 
   const handleFinish = () => {
+    createTestResult({
+      mark: sum,
+      testId: test._id,
+      answers: yourAnswers.map((item) => item.answerId),
+    });
     setIsSubmitted(true);
-    // navigation.goBack();
   };
 
   const handleSelect = (id) => {
@@ -68,7 +77,12 @@ const TestCompleting = ({ route, navigation }) => {
       (answer) => answer._id === values[key],
     );
     const mark = answer.isCorrect ? question.mark : 0;
-    return { questionText: question.text, answerText: answer.text, mark };
+    return {
+      questionText: question.text,
+      answerText: answer.text,
+      answerId: answer._id,
+      mark,
+    };
   });
 
   const sum = yourAnswers.reduce((a, c) => a + c.mark, 0);
@@ -76,7 +90,11 @@ const TestCompleting = ({ route, navigation }) => {
 
   const percent = (sum * 100) / maxSum;
 
-  return !isSubmitted ? (
+  return isLoading(status) ? (
+    <View style={styles.fullHeight}>
+      <Loader />
+    </View>
+  ) : !isSubmitted ? (
     <View style={styles.wrapper}>
       <View style={styles.info}>
         <Text style={styles.title}>{activeQuestion.text}</Text>
@@ -146,6 +164,9 @@ const TestCompleting = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  fullHeight: {
+    height: '100%',
+  },
   wrapper: {
     height: '100%',
     display: 'flex',
@@ -232,4 +253,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TestCompleting;
+const mapStateToProps = (state) => ({
+  status: getTestResultStatus(state),
+});
+
+const mapDispatchToProps = {
+  createTestResult: createTestResultStart,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TestCompleting);

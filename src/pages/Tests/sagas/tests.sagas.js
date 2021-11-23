@@ -46,3 +46,21 @@ export function* fetchTests({ payload: { params } }) {
 export function* watchFetchTests() {
   yield takeLatest(TESTS_ACTION_TYPES.FETCH_TESTS.START, fetchTests);
 }
+
+export function* createTestResult({ payload: { data } }) {
+  try {
+    yield put(actions.createTestResultInProgress());
+    yield call(api.createTestResult, data);
+    yield put(actions.createTestResultSuccess());
+  } catch (error) {
+    yield call(notify, error?.text || '', 'danger');
+    yield put(actions.createTestResultError(error.text));
+  }
+}
+
+export function* watchCreateTestResult() {
+  yield takeLatest(
+    TESTS_ACTION_TYPES.CREATE_TEST_RESULT.START,
+    createTestResult,
+  );
+}

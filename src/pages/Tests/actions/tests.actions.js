@@ -19,8 +19,26 @@ export const fetchTestsError = createAction(
   TESTS_ACTION_TYPES.FETCH_TESTS.ERROR,
   (error) => error,
 );
-
+////////////////////////////////////////////
 export const applyFilter = createAction(
   TESTS_ACTION_TYPES.FILTER_TESTS,
   (data) => ({ data }),
+);
+////////////////////////////////////////////
+export const createTestResultStart = createAction(
+  TESTS_ACTION_TYPES.CREATE_TEST_RESULT.START,
+  (data) => ({ data }),
+);
+
+export const createTestResultInProgress = createAction(
+  TESTS_ACTION_TYPES.CREATE_TEST_RESULT.IN_PROGRESS,
+);
+
+export const createTestResultSuccess = createAction(
+  TESTS_ACTION_TYPES.CREATE_TEST_RESULT.SUCCESS,
+);
+
+export const createTestResultError = createAction(
+  TESTS_ACTION_TYPES.CREATE_TEST_RESULT.ERROR,
+  (error) => error,
 );
