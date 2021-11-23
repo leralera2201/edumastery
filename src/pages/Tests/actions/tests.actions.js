@@ -19,9 +19,35 @@ export const fetchTestsError = createAction(
   TESTS_ACTION_TYPES.FETCH_TESTS.ERROR,
   (error) => error,
 );
+
+////////////////////////////////////////////
+export const fetchCompletedTestsStart = createAction(
+  TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.START,
+  (params) => ({ params }),
+);
+
+export const fetchCompletedTestsInProgress = createAction(
+  TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.IN_PROGRESS,
+);
+
+export const fetchCompletedTestsSuccess = createAction(
+  TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.SUCCESS,
+  (data, params) => ({ data, params }),
+);
+
+export const fetchCompletedTestsError = createAction(
+  TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.ERROR,
+  (error) => error,
+);
+
 ////////////////////////////////////////////
 export const applyFilter = createAction(
   TESTS_ACTION_TYPES.FILTER_TESTS,
+  (data) => ({ data }),
+);
+////////////////////////////////////////////
+export const applyCompletedFilter = createAction(
+  TESTS_ACTION_TYPES.FILTER_COMPLETED_TESTS,
   (data) => ({ data }),
 );
 ////////////////////////////////////////////

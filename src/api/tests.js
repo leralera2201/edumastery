@@ -5,5 +5,10 @@ export const getTests = (params) =>
     params,
   });
 
+export const getCompletedTests = (params) =>
+  client.get('/api/testResult/getFilteredByUser', {
+    params,
+  });
+
 export const createTestResult = (data) =>
   client.post('/api/testResult/add', data);

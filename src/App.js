@@ -17,6 +17,7 @@ import EditPassword from 'pages/Auth/components/EditPassword';
 import { logout } from 'pages/Auth/actions/auth.actions';
 import Tests from 'pages/Tests/components/Tests';
 import TestsFilter from 'pages/Tests/components/TestsFilter';
+import CompletedTestsFilter from 'pages/Tests/components/CompletedTestsFilter';
 import TestDetails from 'pages/Tests/components/TestDetails';
 import MyTests from 'pages/Tests/components/MyTests';
 import TestCompleting from 'pages/Tests/components/TestCompleting';
@@ -206,11 +207,31 @@ const HistoryStack = () => {
     await removeItem('X-AuthToken');
   };
 
+  const handleNavigate = () => {
+    navigate('CompletedTestsFilter');
+  };
+
+  const handleGoBack = () => {
+    goBack();
+  };
+
   return (
     <StackHistory.Navigator>
       <StackHistory.Group
         screenOptions={{
-          headerRight: () => <NavBarButton onPress={handleLogout} />,
+          headerRight: () => (
+            <View style={styles.icons}>
+              <TouchableOpacity onPress={handleNavigate}>
+                <MaterialCommunityIcons
+                  name="filter-outline"
+                  size={25}
+                  color={Config.white}
+                  style={styles.filterIcon}
+                />
+              </TouchableOpacity>
+              <NavBarButton onPress={handleLogout} />
+            </View>
+          ),
           title: 'History',
           headerStyle: { backgroundColor: Config.secondary },
           headerTitleStyle: {
@@ -218,6 +239,31 @@ const HistoryStack = () => {
           },
         }}>
         <StackHistory.Screen name="History" component={MyTests} />
+      </StackHistory.Group>
+      <StackHistory.Group
+        screenOptions={{
+          presentation: 'fullScreenModal',
+          headerStyle: {
+            backgroundColor: Config.secondary,
+          },
+          headerTitleStyle: { color: Config.white },
+        }}>
+        <StackHistory.Screen
+          name="CompletedTestsFilter"
+          component={CompletedTestsFilter}
+          options={{
+            title: 'Filter',
+            headerLeft: () => (
+              <TouchableOpacity onPress={handleGoBack}>
+                <MaterialCommunityIcons
+                  name="close"
+                  size={25}
+                  color={Config.white}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </StackHistory.Group>
     </StackHistory.Navigator>
   );

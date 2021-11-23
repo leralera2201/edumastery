@@ -1,23 +1,43 @@
 import React from 'react';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import Config from 'config/colors';
 import { difficultyObj } from 'constants';
 
-const TestItem = ({ onPress, title, difficulty, categoryName }) => {
+const TestItem = ({ title, difficulty, categoryName, maxMark, mark }) => {
+  const percent = (mark * 100) / maxMark;
+
   return (
-    <TouchableOpacity onPress={onPress} style={styles.wrapper}>
-      <Text style={styles.title}>{title}</Text>
-      <View style={[styles.bottomWrapper, styles.extraTopSpace]}>
-        <View style={styles.categoryWrapper}>
-          <Text style={styles.category}>{categoryName}</Text>
-        </View>
+    <View style={styles.wrapper}>
+      <View style={[styles.bottomWrapper, styles.extraBottomSpace]}>
+        <Text style={styles.title}>{title}</Text>
         <View style={styles.difficultyWrapper}>
           <View style={styles.circle} />
           <Text style={styles.difficulty}>{difficultyObj[difficulty]}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+      <View style={styles.bottomWrapper}>
+        <View style={styles.categoryWrapper}>
+          <Text style={styles.category}>{categoryName}</Text>
+        </View>
+        <View
+          style={[
+            styles.totalScoreWrapper,
+            {
+              backgroundColor:
+                percent < 50
+                  ? Config.error
+                  : percent < 75
+                  ? Config.warning
+                  : Config.success,
+            },
+          ]}>
+          <Text style={styles.totalScore}>
+            {mark}/{maxMark}
+          </Text>
+        </View>
+      </View>
+    </View>
   );
 };
 
@@ -42,6 +62,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  totalScoreWrapper: {
+    width: 70,
+    paddingVertical: 10,
+    borderRadius: 50,
+  },
+  totalScore: {
+    fontSize: 16,
+    color: Config.white,
+    textAlign: 'center',
+  },
   categoryWrapper: {
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -63,8 +93,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
   },
-  extraTopSpace: {
-    marginTop: 10,
+  extraBottomSpace: {
+    marginBottom: 10,
   },
 });
 

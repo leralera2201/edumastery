@@ -14,6 +14,18 @@ const initialState = {
     },
     error: null,
   },
+  completedList: {
+    data: {
+      total: 0,
+      items: [],
+    },
+    status: ACTION_STATUS.NOT_STARTED,
+    filter: {
+      pageSize: 20,
+      page: 1,
+    },
+    error: null,
+  },
   testResult: {
     status: ACTION_STATUS.NOT_STARTED,
     error: null,
@@ -38,7 +50,7 @@ const testsReducer = (state = initialState, action) => {
           ...state.list,
           data: action.payload.data,
           filter: {
-            ...state.filter,
+            ...state.list.filter,
             ...action.payload.params,
           },
           status: ACTION_STATUS.SUCCESS,
@@ -55,13 +67,58 @@ const testsReducer = (state = initialState, action) => {
         },
       };
     //////////////////////////////////////////
+    case TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.IN_PROGRESS:
+      return {
+        ...state,
+        completedList: {
+          ...state.completedList,
+          status: ACTION_STATUS.IN_PROGRESS,
+          error: null,
+        },
+      };
+    case TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.SUCCESS:
+      return {
+        ...state,
+        completedList: {
+          ...state.completedList,
+          data: action.payload.data,
+          filter: {
+            ...state.completedList.filter,
+            ...action.payload.params,
+          },
+          status: ACTION_STATUS.SUCCESS,
+          error: null,
+        },
+      };
+    case TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.ERROR:
+      return {
+        ...state,
+        completedList: {
+          ...state.completedList,
+          status: ACTION_STATUS.ERROR,
+          error: action.payload,
+        },
+      };
+    //////////////////////////////////////////
     case TESTS_ACTION_TYPES.FILTER_TESTS:
       return {
         ...state,
         list: {
           ...state.list,
           filter: {
-            ...state.filter,
+            ...state.list.filter,
+            ...action.payload.data,
+          },
+        },
+      };
+    //////////////////////////////////////////
+    case TESTS_ACTION_TYPES.FILTER_COMPLETED_TESTS:
+      return {
+        ...state,
+        completedList: {
+          ...state.completedList,
+          filter: {
+            ...state.completedList.filter,
             ...action.payload.data,
           },
         },

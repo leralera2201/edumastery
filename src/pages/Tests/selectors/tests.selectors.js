@@ -16,9 +16,15 @@ export const getCategories = createSelector(
   getCategoriesState,
   ({ data }) => data,
 );
+
 export const getTests = createSelector(
   getTestsState,
   ({ list }) => list.data.items,
+);
+
+export const getCompletedTests = createSelector(
+  getTestsState,
+  ({ completedList }) => completedList.data.items,
 );
 
 export const getCategoriesStatus = createSelector(
@@ -31,14 +37,29 @@ export const getTestsTotal = createSelector(
   ({ list }) => list.data.total,
 );
 
+export const getCompletedTestsTotal = createSelector(
+  getTestsState,
+  ({ completedList }) => completedList.data.total,
+);
+
 export const getTestsFilter = createSelector(
   getTestsState,
   ({ list }) => list.filter,
 );
 
+export const getCompletedTestsFilter = createSelector(
+  getTestsState,
+  ({ completedList }) => completedList.filter,
+);
+
 export const getTestsStatus = createSelector(
   getTestsState,
   ({ list }) => list.status,
+);
+
+export const getCompletedTestsStatus = createSelector(
+  getTestsState,
+  ({ completedList }) => completedList.status,
 );
 
 export const getTestResultStatus = createSelector(
