@@ -97,6 +97,13 @@ function HomeScreen() {
           headerTitleStyle: { color: Config.white },
         }}>
         <StackHome.Screen
+          name="SetUserInfo"
+          component={SetUserInfo}
+          options={{
+            title: 'Set Info',
+          }}
+        />
+        <StackHome.Screen
           name="TestsFilter"
           component={TestsFilter}
           options={{
@@ -344,30 +351,7 @@ const App = () => {
       {loading && <Loader />}
       {!loading &&
         (token ? (
-          <Stack.Navigator
-            screenOptions={{
-              headerStyle: { backgroundColor: Config.secondary },
-              headerTitleStyle: {
-                color: Config.white,
-              },
-            }}>
-            <Stack.Group>
-              <Stack.Screen
-                name="Home"
-                component={HomeTabs}
-                options={{
-                  headerShown: false,
-                }}
-              />
-            </Stack.Group>
-            <Stack.Group
-              screenOptions={{
-                presentation: 'fullScreenModal',
-                title: 'Set Info',
-              }}>
-              <Stack.Screen name="SetUserInfo" component={SetUserInfo} />
-            </Stack.Group>
-          </Stack.Navigator>
+          <HomeTabs />
         ) : (
           <Stack.Navigator
             screenOptions={{

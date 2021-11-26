@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Keyboard,
+  Image,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  ScrollView,
+} from 'react-native';
 import Config from 'config/colors';
 import TextInput from 'components/TextInput';
 import Loader from 'components/Loader';
@@ -98,59 +108,67 @@ const Login = ({ navigation, status, login }) => {
   const loading = isLoading(status);
 
   return (
-    <View style={styles.container}>
-      {loading && <Loader />}
-      <Image
-        resizeMode="contain"
-        style={styles.image}
-        source={require('assets/Edumastery.png')}
-      />
-      <TextInput
-        inputStyle={styles.textInput}
-        inputViewStyle={[
-          styles.inputView,
-          errors.email.isFocused && styles.inputViewFocused,
-        ]}
-        placeholder="Email"
-        placeholderTextColor="#003f5c"
-        onChangeText={handleEmailChange}
-        value={values.email}
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect={false}
-        errors={errors.email.showError ? errors.email.messages : []}
-        onBlur={() => handleBlur('email')}
-        onFocus={() => handleFocus('email')}
-      />
-      <TextInput
-        inputStyle={styles.textInput}
-        inputViewStyle={[
-          styles.inputView,
-          errors.password.isFocused && styles.inputViewFocused,
-        ]}
-        placeholder="Password"
-        placeholderTextColor="#003f5c"
-        secureTextEntry={true}
-        value={values.password}
-        onChangeText={handlePasswordChange}
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect={false}
-        errors={errors.password.showError ? errors.password.messages : []}
-        onBlur={() => handleBlur('password')}
-        onFocus={() => handleFocus('password')}
-      />
-      <TouchableOpacity onPress={handleNavigateToForgotPassword}>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleNavigateRegistration}>
-        <Text style={styles.forgot_button}>Do not have an account?</Text>
-      </TouchableOpacity>
+    <KeyboardAvoidingView
+      behavior={Device.isIOS ? 'padding' : 'height'}
+      style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
+          <View style={styles.container}>
+            {loading && <Loader />}
+            <Image
+              resizeMode="contain"
+              style={styles.image}
+              source={require('assets/Edumastery.png')}
+            />
+            <TextInput
+              inputStyle={styles.textInput}
+              inputViewStyle={[
+                styles.inputView,
+                errors.email.isFocused && styles.inputViewFocused,
+              ]}
+              placeholder="Email"
+              placeholderTextColor="#003f5c"
+              onChangeText={handleEmailChange}
+              value={values.email}
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect={false}
+              errors={errors.email.showError ? errors.email.messages : []}
+              onBlur={() => handleBlur('email')}
+              onFocus={() => handleFocus('email')}
+            />
+            <TextInput
+              inputStyle={styles.textInput}
+              inputViewStyle={[
+                styles.inputView,
+                errors.password.isFocused && styles.inputViewFocused,
+              ]}
+              placeholder="Password"
+              placeholderTextColor="#003f5c"
+              secureTextEntry={true}
+              value={values.password}
+              onChangeText={handlePasswordChange}
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect={false}
+              errors={errors.password.showError ? errors.password.messages : []}
+              onBlur={() => handleBlur('password')}
+              onFocus={() => handleFocus('password')}
+            />
+            <TouchableOpacity onPress={handleNavigateToForgotPassword}>
+              <Text style={styles.forgot_button}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleNavigateRegistration}>
+              <Text style={styles.forgot_button}>Do not have an account?</Text>
+            </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-        <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
-    </View>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+              <Text style={styles.loginText}>Login</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -161,11 +179,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    height: Device.height - 40,
   },
 
   image: {
     flex: 1,
     alignSelf: 'stretch',
+    marginTop: 20,
     width: Device.width,
     maxHeight: 200,
     marginBottom: 50,
