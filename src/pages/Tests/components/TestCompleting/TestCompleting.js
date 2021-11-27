@@ -4,10 +4,12 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Config from 'config/colors';
+import Notification from 'notification';
 import RadioButton from 'components/RadioButton';
 import { getTestResultStatus } from 'pages/Tests/selectors/tests.selectors';
 import { createTestResultStart } from 'pages/Tests/actions/tests.actions';
 import { isLoading } from 'utils/isLoading';
+import Device from 'device';
 import Loader from 'components/Loader';
 
 const TestCompleting = ({ route, navigation, createTestResult, status }) => {
@@ -35,6 +37,21 @@ const TestCompleting = ({ route, navigation, createTestResult, status }) => {
 
   const handlePop = () => {
     navigation.popToTop();
+    const androidDetails = {
+      date: new Date(Date.now()),
+      allowWhileIdle: true,
+      message: `You got ${sum + '/' + maxSum} points.`,
+      channelId: 'notification-channel',
+    };
+    const iosDetails = {
+      id: 'local',
+      body: `You got ${sum + '/' + maxSum} points.`,
+    };
+    console.log(Device.isAndroid);
+    Notification.showNotification({
+      title: `Congratulations! You passed "${test.name}".`,
+      ...(Device.isAndroid ? androidDetails : iosDetails),
+    });
   };
 
   const handlePress = () => {

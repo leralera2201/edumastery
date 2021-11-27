@@ -10,6 +10,7 @@ const MODULE_RESOLVER = [
       store: './src/store',
       navigation: './src/navigation',
       device: './src/device',
+      notification: './src/notification',
       assets: './src/assets',
       api: './src/api',
       storage: './src/storage',

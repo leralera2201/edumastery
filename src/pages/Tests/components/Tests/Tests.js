@@ -92,7 +92,7 @@ const Tests = ({ tests, fetchTests, filter, status, total, navigation }) => {
     </View>
   );
 
-  if (!total && !loading) {
+  if (!total && !loading && status === ACTION_STATUS.SUCCESS) {
     if (
       !filter.searchWord &&
       !filter.difficulties?.length &&

@@ -10,6 +10,7 @@
       "store*": ["src/store/*"],
       "storage*": ["src/storage/*"],
       "device*": ["src/device/*"],
+      "notification*": ["src/notification/*"],
       "pages*": ["src/pages/*"],
       "navigation*": ["src/navigation/*"],
       "config*": ["src/config/*"],
