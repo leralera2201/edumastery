@@ -12,6 +12,7 @@ import { fetchCompletedTestsStart } from 'pages/Tests/actions/tests.actions';
 import Loader from 'components/Loader';
 import Divider from 'components/Divider';
 import { isLoading } from 'utils/isLoading';
+import { ACTION_STATUS } from 'constants';
 import Config from 'config/colors';
 import TestItem from './TestItem';
 
@@ -28,18 +29,11 @@ const MyTests = ({ fetchTests, tests, filter, status, total }) => {
     }
   }, [isRefreshing, status]);
 
-  const onPress = (test) => {
-    // navigation.push('TestDetails', {
-    //   test,
-    // });
-  };
-
   const renderItem = ({ item }) => {
     return (
       <TestItem
         title={item.testResultSummary.name}
         categoryName={item.testResultSummary.category.name}
-        onPress={() => onPress(item)}
         difficulty={item.testResultSummary.difficulty}
         mark={item.mark}
         maxMark={item.maxMark}
@@ -92,7 +86,7 @@ const MyTests = ({ fetchTests, tests, filter, status, total }) => {
     </View>
   );
 
-  if (!total && !loading) {
+  if (!total && !loading && status === ACTION_STATUS.SUCCESS) {
     if (
       !filter.searchWord &&
       !filter.difficulties?.length &&
