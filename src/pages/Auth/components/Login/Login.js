@@ -155,9 +155,9 @@ const Login = ({ navigation, status, login }) => {
               onBlur={() => handleBlur('password')}
               onFocus={() => handleFocus('password')}
             />
-            <TouchableOpacity onPress={handleNavigateToForgotPassword}>
+            {/* <TouchableOpacity onPress={handleNavigateToForgotPassword}>
               <Text style={styles.forgot_button}>Forgot Password?</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={handleNavigateRegistration}>
               <Text style={styles.forgot_button}>Do not have an account?</Text>
             </TouchableOpacity>

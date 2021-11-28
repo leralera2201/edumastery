@@ -140,6 +140,25 @@ const authReducer = (state = initialState, action) => {
         status: ACTION_STATUS.ERROR,
         error: action.payload,
       };
+    //////////////////////////////////////////
+    case AUTH_ACTION_TYPES.CHANGE_PASSWORD.IN_PROGRESS:
+      return {
+        ...state,
+        status: ACTION_STATUS.IN_PROGRESS,
+        error: null,
+      };
+    case AUTH_ACTION_TYPES.CHANGE_PASSWORD.SUCCESS:
+      return {
+        ...state,
+        error: null,
+        status: ACTION_STATUS.SUCCESS,
+      };
+    case AUTH_ACTION_TYPES.CHANGE_PASSWORD.ERROR:
+      return {
+        ...state,
+        status: ACTION_STATUS.ERROR,
+        error: action.payload,
+      };
     case AUTH_ACTION_TYPES.LOGOUT:
       return {
         ...state,

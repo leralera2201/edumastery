@@ -11,11 +11,12 @@ import {
 } from 'pages/Auth/selectors/auth.selectors';
 import { minLength, required, validateForm, equal } from 'utils/validate';
 import { isLoading } from 'utils/isLoading';
+import { notify } from 'utils/notifier';
 import Loader from 'components/Loader';
-import { updateAccountStart } from 'pages/Auth/actions/auth.actions';
+import { changePasswordStart } from 'pages/Auth/actions/auth.actions';
 import { ACTION_STATUS } from 'constants';
 
-const EditPassword = ({ data, navigation, status, updateAccount, error }) => {
+const EditPassword = ({ navigation, status, changePassword, error }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [values, setValues] = useState({
     password: '',
@@ -39,6 +40,7 @@ const EditPassword = ({ data, navigation, status, updateAccount, error }) => {
   useEffect(() => {
     if (isSubmitted && status === ACTION_STATUS.SUCCESS) {
       navigation.goBack();
+      notify('Password updated successfully!', 'success');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitted, status]);
@@ -74,11 +76,11 @@ const EditPassword = ({ data, navigation, status, updateAccount, error }) => {
         },
       };
     }
-    errorsCopy(newErrors);
+    setErrors(errorsCopy);
 
     if (isValid) {
-      // updateAccount({ password: values.password });
-      // setIsSubmitted(true);
+      changePassword({ newPassword: values.password });
+      setIsSubmitted(true);
     }
   };
 
@@ -260,7 +262,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  updateAccount: updateAccountStart,
+  changePassword: changePasswordStart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditPassword);

@@ -126,4 +126,24 @@ export const fetchAccountError = createAction(
   (error) => error,
 );
 
+//////////////////////////////////////////
 export const logout = createAction(AUTH_ACTION_TYPES.LOGOUT);
+
+//////////////////////////////////////////
+export const changePasswordStart = createAction(
+  AUTH_ACTION_TYPES.CHANGE_PASSWORD.START,
+  (data) => ({ data }),
+);
+
+export const changePasswordInProgress = createAction(
+  AUTH_ACTION_TYPES.CHANGE_PASSWORD.IN_PROGRESS,
+);
+
+export const changePasswordSuccess = createAction(
+  AUTH_ACTION_TYPES.CHANGE_PASSWORD.SUCCESS,
+);
+
+export const changePasswordError = createAction(
+  AUTH_ACTION_TYPES.CHANGE_PASSWORD.ERROR,
+  (error) => error,
+);

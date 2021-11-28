@@ -7,6 +7,7 @@ export const AUTH_ACTION_TYPES = {
   FORGOT_PASSWORD: createActionTypes('FORGOT_PASSWORD'),
   UPDATE_ACCOUNT: createActionTypes('UPDATE_ACCOUNT'),
   FETCH_ACCOUNT: createActionTypes('FETCH_ACCOUNT'),
+  CHANGE_PASSWORD: createActionTypes('CHANGE_PASSWORD'),
   LOGOUT: 'LOGOUT',
   RESET: 'RESET',
 };

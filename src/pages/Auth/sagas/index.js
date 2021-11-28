@@ -5,4 +5,5 @@ export {
   watchSetPassword,
   watchUpdateAccount,
   watchFetchAccount,
+  watchChangePassword,
 } from './auth.sagas';

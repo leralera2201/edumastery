@@ -74,6 +74,21 @@ export function* watchFetchAccount() {
   yield takeLatest(AUTH_ACTION_TYPES.FETCH_ACCOUNT.START, fetchAccount);
 }
 
+export function* changePassword({ payload: { data } }) {
+  try {
+    yield put(actions.changePasswordInProgress());
+    yield call(api.changePassword, data);
+    yield put(actions.changePasswordSuccess());
+  } catch (error) {
+    yield call(notify, error?.text || '', 'danger');
+    yield put(actions.changePasswordError(error?.text));
+  }
+}
+
+export function* watchChangePassword() {
+  yield takeLatest(AUTH_ACTION_TYPES.CHANGE_PASSWORD.START, changePassword);
+}
+
 export function* forgotPassword({ payload: { data } }) {
   try {
     yield put(actions.forgotPasswordInProgress());
