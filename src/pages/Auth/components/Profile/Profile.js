@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ImagePicker from 'components/ImagePicker';
 import Divider from 'components/Divider';
+import Loader from 'components/Loader';
 import Config from 'config/colors';
 import { getAuth } from 'pages/Auth/selectors/auth.selectors';
+import { fetchMarkStart } from 'pages/Tests/actions/tests.actions';
+import { getMark, getMarkStatus } from 'pages/Tests/selectors/tests.selectors';
+import { isLoading } from 'utils/isLoading';
 
-const Profile = ({ data, navigation }) => {
+const getRank = (number = 0) => Math.floor(number / 20) + 1;
+
+const Profile = ({ data, navigation, markData, markStatus, fetchMark }) => {
+  useEffect(() => {
+    fetchMark();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleEdit = () => {
     navigation.navigate('EditProfile');
   };
@@ -18,7 +29,14 @@ const Profile = ({ data, navigation }) => {
 
   return (
     <View style={styles.container}>
+      {isLoading(markStatus) && <Loader />}
       <ImagePicker onEdit={handleEdit} imageSource={data?.photo} />
+      <Divider />
+      <View style={styles.rankContainer}>
+        <View style={styles.rank}>
+          <Text style={styles.rankText}>{getRank(markData?.exp)} Rank</Text>
+        </View>
+      </View>
       <Divider />
       <View style={styles.wrapper}>
         <Text style={styles.wrapperText}>Your personal data:</Text>
@@ -68,6 +86,25 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
   },
+  rank: {
+    padding: 10,
+    marginVertical: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    backgroundColor: Config.primary,
+    borderRadius: 50,
+    width: 100,
+  },
+  rankContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  rankText: {
+    fontSize: 18,
+    color: Config.white,
+  },
   wrapperText: {
     fontSize: 20,
     marginHorizontal: 10,
@@ -97,6 +134,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   data: getAuth(state),
+  markStatus: getMarkStatus(state),
+  markData: getMark(state),
 });
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = {
+  fetchMark: fetchMarkStart,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

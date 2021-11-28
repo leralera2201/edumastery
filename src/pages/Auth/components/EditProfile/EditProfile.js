@@ -76,7 +76,7 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values]);
+  }, [values, imageSource]);
 
   useEffect(() => {
     setValues({

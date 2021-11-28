@@ -5,6 +5,8 @@ export const getTests = (params) =>
     params,
   });
 
+export const getMark = () => client.get('/api/testResult/getUserMarkSummary');
+
 export const getCompletedTests = (params) =>
   client.get('/api/testResult/getFilteredByUser', {
     params,

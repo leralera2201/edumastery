@@ -22,6 +22,13 @@ export const getTests = createSelector(
   ({ list }) => list.data.items,
 );
 
+export const getMark = createSelector(getTestsState, ({ mark }) => mark.data);
+
+export const getMarkStatus = createSelector(
+  getTestsState,
+  ({ mark }) => mark.status,
+);
+
 export const getCompletedTests = createSelector(
   getTestsState,
   ({ completedList }) => completedList.data.items,

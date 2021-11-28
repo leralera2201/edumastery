@@ -50,6 +50,21 @@ export function* watchFetchTests() {
   yield takeLatest(TESTS_ACTION_TYPES.FETCH_TESTS.START, fetchTests);
 }
 
+export function* fetchMark() {
+  try {
+    yield put(actions.fetchMarkInProgress());
+    const response = yield call(api.getMark);
+    yield put(actions.fetchMarkSuccess(response));
+  } catch (error) {
+    yield call(notify, error?.text || '', 'danger');
+    yield put(actions.fetchMarkError(error.text));
+  }
+}
+
+export function* watchFetchMark() {
+  yield takeLatest(TESTS_ACTION_TYPES.FETCH_MARK.START, fetchMark);
+}
+
 export function* fetchCompletedTests({ payload: { params } }) {
   try {
     yield put(actions.fetchCompletedTestsInProgress());

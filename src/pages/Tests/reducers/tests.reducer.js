@@ -14,6 +14,11 @@ const initialState = {
     },
     error: null,
   },
+  mark: {
+    data: null,
+    status: ACTION_STATUS.NOT_STARTED,
+    error: null,
+  },
   completedList: {
     data: {
       total: 0,
@@ -62,6 +67,35 @@ const testsReducer = (state = initialState, action) => {
         ...state,
         list: {
           ...state.list,
+          status: ACTION_STATUS.ERROR,
+          error: action.payload,
+        },
+      };
+    //////////////////////////////////////////
+    case TESTS_ACTION_TYPES.FETCH_MARK.IN_PROGRESS:
+      return {
+        ...state,
+        mark: {
+          ...state.mark,
+          status: ACTION_STATUS.IN_PROGRESS,
+          error: null,
+        },
+      };
+    case TESTS_ACTION_TYPES.FETCH_MARK.SUCCESS:
+      return {
+        ...state,
+        mark: {
+          ...state.mark,
+          data: action.payload.data,
+          status: ACTION_STATUS.SUCCESS,
+          error: null,
+        },
+      };
+    case TESTS_ACTION_TYPES.FETCH_MARK.ERROR:
+      return {
+        ...state,
+        mark: {
+          ...state.mark,
           status: ACTION_STATUS.ERROR,
           error: action.payload,
         },

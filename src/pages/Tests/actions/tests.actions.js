@@ -21,6 +21,23 @@ export const fetchTestsError = createAction(
 );
 
 ////////////////////////////////////////////
+export const fetchMarkStart = createAction(TESTS_ACTION_TYPES.FETCH_MARK.START);
+
+export const fetchMarkInProgress = createAction(
+  TESTS_ACTION_TYPES.FETCH_MARK.IN_PROGRESS,
+);
+
+export const fetchMarkSuccess = createAction(
+  TESTS_ACTION_TYPES.FETCH_MARK.SUCCESS,
+  (data) => ({ data }),
+);
+
+export const fetchMarkError = createAction(
+  TESTS_ACTION_TYPES.FETCH_MARK.ERROR,
+  (error) => error,
+);
+
+////////////////////////////////////////////
 export const fetchCompletedTestsStart = createAction(
   TESTS_ACTION_TYPES.FETCH_COMPLETED_TESTS.START,
   (params) => ({ params }),
