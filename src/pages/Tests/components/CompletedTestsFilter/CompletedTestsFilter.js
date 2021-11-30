@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
+} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -154,66 +160,72 @@ const TestsFilter = ({
   const loading = isLoading(status, categoriesStatus);
 
   return (
-    <View style={styles.wrapper}>
-      {loading && <Loader />}
-      <TextInput
-        inputStyle={styles.textInput}
-        inputViewStyle={[
-          styles.inputView,
-          focused.search && styles.inputViewFocused,
-        ]}
-        placeholder="Search"
-        placeholderTextColor="#003f5c"
-        onChangeText={handleSearch}
-        value={values.search}
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect={false}
-        onBlur={() => handleBlur('search')}
-        onFocus={() => handleFocus('search')}
-      />
-      <Divider />
-      <View style={styles.selectWrapper}>
-        <RNPickerSelect
-          placeholder={placeholder}
-          style={pickerSelectStyles}
-          value={values.category}
-          onValueChange={handleCategoryChange}
-          items={categories.map((category) => ({
-            label: category.name,
-            value: category._id,
-          }))}
-        />
-      </View>
-      <Divider />
-      <View style={styles.radioWrapper}>
-        <RadioButton
-          title="Beginner"
-          selected={values.difficulty[1]}
-          onPress={() => handleDifficultyChange('1')}
-        />
-        <RadioButton
-          title="Easy"
-          selected={values.difficulty[2]}
-          onPress={() => handleDifficultyChange('2')}
-        />
-        <RadioButton
-          title="Normal"
-          selected={values.difficulty[3]}
-          onPress={() => handleDifficultyChange('3')}
-        />
-        <RadioButton
-          title="Hard"
-          selected={values.difficulty[4]}
-          onPress={() => handleDifficultyChange('4')}
-        />
-        <RadioButton
-          title="Extremely hard"
-          selected={values.difficulty[5]}
-          onPress={() => handleDifficultyChange('5')}
-        />
-      </View>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Device.isIOS ? 'padding' : 'height'}
+      style={styles.container}>
+      <ScrollView>
+        <View style={styles.wrapper}>
+          {loading && <Loader />}
+          <TextInput
+            inputStyle={styles.textInput}
+            inputViewStyle={[
+              styles.inputView,
+              focused.search && styles.inputViewFocused,
+            ]}
+            placeholder="Search"
+            placeholderTextColor="#003f5c"
+            onChangeText={handleSearch}
+            value={values.search}
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
+            onBlur={() => handleBlur('search')}
+            onFocus={() => handleFocus('search')}
+          />
+          <Divider />
+          <View style={styles.selectWrapper}>
+            <RNPickerSelect
+              placeholder={placeholder}
+              style={pickerSelectStyles}
+              value={values.category}
+              onValueChange={handleCategoryChange}
+              items={categories.map((category) => ({
+                label: category.name,
+                value: category._id,
+              }))}
+            />
+          </View>
+          <Divider />
+          <View style={styles.radioWrapper}>
+            <RadioButton
+              title="Beginner"
+              selected={values.difficulty[1]}
+              onPress={() => handleDifficultyChange('1')}
+            />
+            <RadioButton
+              title="Easy"
+              selected={values.difficulty[2]}
+              onPress={() => handleDifficultyChange('2')}
+            />
+            <RadioButton
+              title="Normal"
+              selected={values.difficulty[3]}
+              onPress={() => handleDifficultyChange('3')}
+            />
+            <RadioButton
+              title="Hard"
+              selected={values.difficulty[4]}
+              onPress={() => handleDifficultyChange('4')}
+            />
+            <RadioButton
+              title="Extremely hard"
+              selected={values.difficulty[5]}
+              onPress={() => handleDifficultyChange('5')}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

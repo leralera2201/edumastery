@@ -196,8 +196,10 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
     <KeyboardAvoidingView
       behavior={Device.isIOS ? 'padding' : 'height'}
       style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView>
+      <ScrollView>
+        <TouchableWithoutFeedback
+          onPress={Keyboard.dismiss}
+          style={Device.isIOS ? styles.paddingBottom : {}}>
           <View style={styles.container}>
             {loading && <Loader />}
             <Image
@@ -303,8 +305,8 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
               <Text style={styles.loginText}>Register</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -360,6 +362,9 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: '#ffffff',
+  },
+  paddingBottom: {
+    paddingBottom: 50,
   },
 });
 

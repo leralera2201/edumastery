@@ -111,8 +111,8 @@ const Login = ({ navigation, status, login }) => {
     <KeyboardAvoidingView
       behavior={Device.isIOS ? 'padding' : 'height'}
       style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView>
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
             {loading && <Loader />}
             <Image
@@ -166,8 +166,8 @@ const Login = ({ navigation, status, login }) => {
               <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

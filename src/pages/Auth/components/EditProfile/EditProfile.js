@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+} from 'react-native';
 import ImagePicker from 'components/ImagePicker';
 import TextInput from 'components/TextInput';
 import Config from 'config/colors';
@@ -93,13 +102,36 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
     const form = new FormData();
     if (isValid) {
       if (imageSource) {
-        form.append('photo', {
-          name: imageSource.fileName,
-          uri: Device.isAndroid
-            ? imageSource.uri
-            : imageSource.uri.replace('file://', ''),
-          type: imageSource.type,
-        });
+        const img = new File(
+          [
+            {
+              ...imageSource,
+              uri: imageSource.uri.replace('file:///', ''),
+            },
+          ],
+          imageSource.fileName,
+          {
+            type: imageSource.type,
+          },
+        );
+        // const newImg = {
+        //   lastModified: 1633461194739,
+        //   lastModifiedDate: new Date(),
+        //   name: "Albania.jpg",
+        //   size: 37807,
+        //   type: "image/jpeg",
+        //   webkitRelativePath: "",
+        // };
+        form.append('photo', img);
+        // console.log(imageSource.uri.replace('file:///', ''));
+        // console.log(img)
+        // form.append('photo', {
+        //   name: imageSource.fileName,
+        //   uri: Device.isAndroid
+        //     ? imageSource.uri
+        //     : imageSource.uri.replace('file://', ''),
+        //   type: imageSource.type,
+        // });
       }
       form.append('nickname', values.nickname);
       form.append('name', values.name);
@@ -171,89 +203,100 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {loading && <Loader />}
-      <ImagePicker
-        setImageSource={setImageSource}
-        imageSource={imageSource?.uri}
-      />
-      <Divider />
-      <View style={styles.wrapper}>
-        {!!error && (
-          <View>
-            <Text style={styles.error}>{error}</Text>
+    <KeyboardAvoidingView
+      behavior={Device.isIOS ? 'padding' : 'height'}
+      keyboardVerticalOffset={Device.isAndroid && 150}
+      style={styles.flexFull}>
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={Device.isIOS ? styles.paddingBottom : {}}>
+            {loading && <Loader />}
+            <ImagePicker
+              setImageSource={setImageSource}
+              imageSource={imageSource?.uri}
+            />
+            <Divider />
+            <View style={styles.wrapper}>
+              {!!error && (
+                <View>
+                  <Text style={styles.error}>{error}</Text>
+                </View>
+              )}
+              <TextInput
+                inputStyle={styles.textInput}
+                inputViewStyle={[
+                  styles.inputView,
+                  errors.email.isFocused && styles.inputViewFocused,
+                ]}
+                placeholder="Email"
+                placeholderTextColor="#003f5c"
+                onChangeText={handleEmailChange}
+                value={values.email}
+                errors={errors.email.showError ? errors.email.messages : []}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                onBlur={() => handleBlur('email')}
+                onFocus={() => handleFocus('email')}
+              />
+              <TextInput
+                inputStyle={styles.textInput}
+                inputViewStyle={[
+                  styles.inputView,
+                  errors.name.isFocused && styles.inputViewFocused,
+                ]}
+                placeholder="Name"
+                placeholderTextColor="#003f5c"
+                onChangeText={handleNameChange}
+                value={values.name}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                errors={errors.name.showError ? errors.name.messages : []}
+                onBlur={() => handleBlur('name')}
+                onFocus={() => handleFocus('name')}
+              />
+              <TextInput
+                inputStyle={styles.textInput}
+                inputViewStyle={[
+                  styles.inputView,
+                  errors.surname.isFocused && styles.inputViewFocused,
+                ]}
+                placeholder="Surname"
+                placeholderTextColor="#003f5c"
+                onChangeText={handleSurnameChange}
+                value={values.surname}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                errors={errors.surname.showError ? errors.surname.messages : []}
+                onBlur={() => handleBlur('surname')}
+                onFocus={() => handleFocus('surname')}
+              />
+              <TextInput
+                inputStyle={styles.textInput}
+                inputViewStyle={[
+                  styles.inputView,
+                  errors.nickname.isFocused && styles.inputViewFocused,
+                ]}
+                placeholder="Nickname"
+                placeholderTextColor="#003f5c"
+                onChangeText={handleNicknameChange}
+                value={values.nickname}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                errors={
+                  errors.nickname.showError ? errors.nickname.messages : []
+                }
+                onBlur={() => handleBlur('nickname')}
+                onFocus={() => handleFocus('nickname')}
+              />
+            </View>
           </View>
-        )}
-        <TextInput
-          inputStyle={styles.textInput}
-          inputViewStyle={[
-            styles.inputView,
-            errors.email.isFocused && styles.inputViewFocused,
-          ]}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleEmailChange}
-          value={values.email}
-          errors={errors.email.showError ? errors.email.messages : []}
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect={false}
-          onBlur={() => handleBlur('email')}
-          onFocus={() => handleFocus('email')}
-        />
-        <TextInput
-          inputStyle={styles.textInput}
-          inputViewStyle={[
-            styles.inputView,
-            errors.name.isFocused && styles.inputViewFocused,
-          ]}
-          placeholder="Name"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleNameChange}
-          value={values.name}
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect={false}
-          errors={errors.name.showError ? errors.name.messages : []}
-          onBlur={() => handleBlur('name')}
-          onFocus={() => handleFocus('name')}
-        />
-        <TextInput
-          inputStyle={styles.textInput}
-          inputViewStyle={[
-            styles.inputView,
-            errors.surname.isFocused && styles.inputViewFocused,
-          ]}
-          placeholder="Surname"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleSurnameChange}
-          value={values.surname}
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect={false}
-          errors={errors.surname.showError ? errors.surname.messages : []}
-          onBlur={() => handleBlur('surname')}
-          onFocus={() => handleFocus('surname')}
-        />
-        <TextInput
-          inputStyle={styles.textInput}
-          inputViewStyle={[
-            styles.inputView,
-            errors.nickname.isFocused && styles.inputViewFocused,
-          ]}
-          placeholder="Nickname"
-          placeholderTextColor="#003f5c"
-          onChangeText={handleNicknameChange}
-          value={values.nickname}
-          autoCapitalize="none"
-          autoComplete="off"
-          autoCorrect={false}
-          errors={errors.nickname.showError ? errors.nickname.messages : []}
-          onBlur={() => handleBlur('nickname')}
-          onFocus={() => handleFocus('nickname')}
-        />
-      </View>
-    </View>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -261,6 +304,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Config.white,
     height: '100%',
+  },
+  flexFull: {
+    flex: 1,
+  },
+  paddingBottom: {
+    paddingBottom: 50,
   },
   error: {
     color: Config.error,
