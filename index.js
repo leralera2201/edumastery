@@ -1,9 +1,9 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import FlashMessage from 'react-native-flash-message';
 import PushNotification from 'react-native-push-notification';
 import store, { persistor } from './src/store';
 import App from './src/App';
@@ -46,11 +46,11 @@ PushNotification.getChannels((details) => console.log(details));
 const Component = () => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <FlashMessage position="top" />
       <NavigationContainer ref={navigationRef}>
         <App />
       </NavigationContainer>
     </PersistGate>
+    <Toast />
   </Provider>
 );
 

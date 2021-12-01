@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -14,6 +14,7 @@ import {
 import ImagePicker from 'components/ImagePicker';
 import TextInput from 'components/TextInput';
 import Config from 'config/colors';
+import { notify } from 'utils/notifier';
 import Device from 'device';
 import {
   getAuth,
@@ -102,18 +103,18 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
     const form = new FormData();
     if (isValid) {
       if (imageSource) {
-        const img = new File(
-          [
-            {
-              ...imageSource,
-              uri: imageSource.uri.replace('file:///', ''),
-            },
-          ],
-          imageSource.fileName,
-          {
-            type: imageSource.type,
-          },
-        );
+        // const img = new File(
+        //   [
+        //     {
+        //       ...imageSource,
+        //       uri: imageSource.uri.replace('file:///', ''),
+        //     },
+        //   ],
+        //   imageSource.fileName,
+        //   {
+        //     type: imageSource.type,
+        //   },
+        // );
         // const newImg = {
         //   lastModified: 1633461194739,
         //   lastModifiedDate: new Date(),
@@ -122,16 +123,16 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
         //   type: "image/jpeg",
         //   webkitRelativePath: "",
         // };
-        form.append('photo', img);
+        // form.append('photo', img);
         // console.log(imageSource.uri.replace('file:///', ''));
         // console.log(img)
-        // form.append('photo', {
-        //   name: imageSource.fileName,
-        //   uri: Device.isAndroid
-        //     ? imageSource.uri
-        //     : imageSource.uri.replace('file://', ''),
-        //   type: imageSource.type,
-        // });
+        form.append('photo', {
+          name: imageSource.fileName,
+          uri: Device.isAndroid
+            ? imageSource.uri
+            : imageSource.uri.replace('file://', ''),
+          type: imageSource.type,
+        });
       }
       form.append('nickname', values.nickname);
       form.append('name', values.name);

@@ -15,7 +15,7 @@ export function* loginUser({ payload: { data } }) {
     yield put(actions.loginUserSuccess(response));
     yield put(actions.fetchAccountStart(response.userId));
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.loginUserError(error.text));
   }
 }
@@ -31,7 +31,7 @@ export function* register({ payload: { data } }) {
     yield put(actions.registerSuccess(response));
     yield call(notify, 'You are registered successfully', 'success');
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.registerError(error?.text));
   }
 }
@@ -47,7 +47,7 @@ export function* updateAccount({ payload: { data } }) {
     yield put(actions.updateAccountSuccess(response));
     yield call(notify, 'Account was updated successfully', 'success');
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.updateAccountError(error?.text));
   }
 }
@@ -65,7 +65,7 @@ export function* fetchAccount({ payload: { id } }) {
       yield call(navigate, 'SetUserInfo');
     }
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.fetchAccountError(error?.text));
   }
 }
@@ -80,7 +80,7 @@ export function* changePassword({ payload: { data } }) {
     yield call(api.changePassword, data);
     yield put(actions.changePasswordSuccess());
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.changePasswordError(error?.text));
   }
 }
@@ -97,7 +97,7 @@ export function* forgotPassword({ payload: { data } }) {
     yield put(actions.forgotPasswordSuccess(response));
   } catch (error) {
     yield put(actions.forgotPasswordError(error?.text));
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
   }
 }
 
@@ -113,7 +113,7 @@ export function* setPassword({ payload: { data } }) {
     // setItem('X-AuthToken', token);
     yield put(actions.setPasswordSuccess(response));
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.setPasswordError(error?.text));
   }
 }

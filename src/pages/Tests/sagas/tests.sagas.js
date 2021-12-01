@@ -41,7 +41,7 @@ export function* fetchTests({ payload: { params } }) {
       ),
     );
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.fetchTestsError(error.text));
   }
 }
@@ -56,7 +56,7 @@ export function* fetchMark() {
     const response = yield call(api.getMark);
     yield put(actions.fetchMarkSuccess(response));
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.fetchMarkError(error.text));
   }
 }
@@ -97,7 +97,7 @@ export function* fetchCompletedTests({ payload: { params } }) {
       ),
     );
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.fetchCompletedTestsError(error.text));
   }
 }
@@ -116,7 +116,7 @@ export function* createTestResult({ payload: { data } }) {
     yield put(actions.createTestResultSuccess());
     yield put(actions.fetchCompletedTestsStart({ page: 1 }));
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.createTestResultError(error.text));
   }
 }

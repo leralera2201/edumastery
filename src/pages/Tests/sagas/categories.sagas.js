@@ -12,7 +12,7 @@ export function* fetchCategories() {
     const response = yield call(api.getCategories);
     yield put(actions.fetchCategoriesSuccess(response));
   } catch (error) {
-    yield call(notify, error?.text || '', 'danger');
+    yield call(notify, error?.text || '', 'error');
     yield put(actions.fetchCategoriesError(error.text));
   }
 }
