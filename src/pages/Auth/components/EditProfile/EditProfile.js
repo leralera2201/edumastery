@@ -95,6 +95,7 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
       surname: data?.surname,
       nickname: data?.nickname,
     });
+    data.photo && setImageSource({ uri: data.photo, withoutUpload: true });
   }, [data]);
 
   const handleSave = () => {
@@ -102,30 +103,7 @@ const EditProfile = ({ data, navigation, status, updateAccount, error }) => {
     setErrors(newErrors);
     const form = new FormData();
     if (isValid) {
-      if (imageSource) {
-        // const img = new File(
-        //   [
-        //     {
-        //       ...imageSource,
-        //       uri: imageSource.uri.replace('file:///', ''),
-        //     },
-        //   ],
-        //   imageSource.fileName,
-        //   {
-        //     type: imageSource.type,
-        //   },
-        // );
-        // const newImg = {
-        //   lastModified: 1633461194739,
-        //   lastModifiedDate: new Date(),
-        //   name: "Albania.jpg",
-        //   size: 37807,
-        //   type: "image/jpeg",
-        //   webkitRelativePath: "",
-        // };
-        // form.append('photo', img);
-        // console.log(imageSource.uri.replace('file:///', ''));
-        // console.log(img)
+      if (imageSource && !imageSource.withoutUpload) {
         form.append('photo', {
           name: imageSource.fileName,
           uri: Device.isAndroid
