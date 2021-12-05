@@ -1,4 +1,5 @@
 export const API_URL = 'https://edumasters-api.herokuapp.com';
+export const API_EMAIL_URL = 'https://edumasters-email-api.herokuapp.com';
 
 export const ACTION_STATUS = {
   NOT_STARTED: 'NOT_STARTED',

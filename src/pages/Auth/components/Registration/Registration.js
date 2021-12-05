@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import CheckBox from '@react-native-community/checkbox';
 import {
   StyleSheet,
   Text,
@@ -36,6 +37,7 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
     surname: '',
     password: '',
     confirmPassword: '',
+    mailing: true,
   });
   const [errors, setErrors] = useState({
     email: {
@@ -90,6 +92,13 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
     setValues((prevValues) => ({
       ...prevValues,
       email: text,
+    }));
+  };
+
+  const handleMailingChange = (value) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      mailing: value,
     }));
   };
 
@@ -166,11 +175,12 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
   };
 
   const handleRegister = () => {
-    const { newErrors, isValid } = validateForm(values, errors);
+    const { mailing, ...otherValues } = values;
+    const { newErrors, isValid } = validateForm(otherValues, errors);
     let errorsCopy = { ...newErrors };
     const confirmPasswordError = equal(
-      values.confirmPassword,
-      values.password,
+      otherValues.confirmPassword,
+      otherValues.password,
       'password',
     );
     if (confirmPasswordError) {
@@ -186,9 +196,9 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
       };
     }
     setErrors(errorsCopy);
-    const { confirmPassword, ...otherValues } = values;
+    const { confirmPassword, ...rest } = values;
     if (isValid && !confirmPasswordError) {
-      register(otherValues);
+      register(rest);
     }
   };
 
@@ -298,7 +308,19 @@ const Registration = ({ navigation, register, status, resetRegister }) => {
               onBlur={() => handleBlur('confirmPassword')}
               onFocus={() => handleFocus('confirmPassword')}
             />
-            <TouchableOpacity onPress={handleGoBack}>
+            <View style={styles.checkboxWrapper}>
+              <CheckBox
+                boxType={'square'}
+                disabled={false}
+                style={styles.checkbox}
+                value={values.mailing}
+                onValueChange={handleMailingChange}
+              />
+              <Text style={styles.checkboxText}>
+                I would like to receive emails
+              </Text>
+            </View>
+            <TouchableOpacity onPress={handleGoBack} style={styles.spaceTop}>
               <Text style={styles.forgot_button}>Already have an account?</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
@@ -319,7 +341,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-
+  spaceTop: {
+    marginTop: 30,
+  },
   image: {
     flex: 1,
     marginTop: 20,
@@ -329,7 +353,19 @@ const styles = StyleSheet.create({
     minHeight: 200,
     marginBottom: 30,
   },
-
+  checkboxWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '70%',
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+  },
+  checkboxText: {
+    marginLeft: 10,
+  },
   inputView: {
     borderRadius: 5,
     borderColor: Config.darkGray,

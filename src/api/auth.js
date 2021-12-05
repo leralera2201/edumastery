@@ -1,8 +1,10 @@
 import client from './client';
+import emailClient from './emailClient';
 
 export const login = (data) => client.post('/api/user/login', data);
 
 export const register = (data) => client.post('/api/user/register', data);
+export const confirmMailing = (data) => emailClient.post('/emailinfo', data);
 
 export const changePassword = (data) =>
   client.put('/api/user/changePassword', data);

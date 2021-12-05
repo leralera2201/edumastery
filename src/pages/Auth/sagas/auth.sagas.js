@@ -27,7 +27,13 @@ export function* watchLoginUser() {
 export function* register({ payload: { data } }) {
   try {
     yield put(actions.registerInProgress());
-    const response = yield call(api.register, data);
+    const { mailing, ...otherValues } = data;
+    const response = yield call(api.register, otherValues);
+    if (mailing) {
+      yield call(api.confirmMailing, {
+        EmailInfoUserEmail: otherValues.email,
+      });
+    }
     yield put(actions.registerSuccess(response));
     yield call(notify, 'You are registered successfully', 'success');
   } catch (error) {
