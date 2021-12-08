@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Config from 'config/colors';
@@ -113,6 +120,11 @@ const TestCompleting = ({ route, navigation, createTestResult, status }) => {
     </View>
   ) : !isSubmitted ? (
     <View style={styles.wrapper}>
+      <View style={styles.stepWrapper}>
+        <Text style={styles.step}>
+          {step}/{test.questions.length}
+        </Text>
+      </View>
       <View style={styles.info}>
         <Text style={styles.title}>{activeQuestion.text}</Text>
         <View style={styles.radioButtonsWrapper}>
@@ -142,47 +154,62 @@ const TestCompleting = ({ route, navigation, createTestResult, status }) => {
       </View>
     </View>
   ) : (
-    <View style={styles.info}>
-      <Text style={styles.title}>{activeQuestion.text}</Text>
-      <Text style={styles.yourAnswers}>Your answers:</Text>
-      {yourAnswers.map((item) => (
-        <View
-          key={`${item.questionText} ${item.answerText}`}
-          style={styles.flex}>
-          <View style={styles.flexInner}>
-            <Text style={styles.text}>{item.questionText}</Text>
-            <Text style={styles.subtitle}>{item.answerText}</Text>
+    <ScrollView>
+      <View style={[styles.info, styles.withoutSpace]}>
+        <Text style={styles.title}>{activeQuestion.text}</Text>
+        <Text style={styles.yourAnswers}>Your answers:</Text>
+        {yourAnswers.map((item) => (
+          <View
+            key={`${item.questionText} ${item.answerText}`}
+            style={styles.flex}>
+            <View style={styles.flexInner}>
+              <Text style={styles.text}>{item.questionText}</Text>
+              <Text style={styles.subtitle}>{item.answerText}</Text>
+            </View>
+            <MaterialCommunityIcons
+              name={item.mark ? 'check' : 'close'}
+              size={25}
+              color={item.mark ? Config.success : Config.error}
+            />
           </View>
-          <MaterialCommunityIcons
-            name={item.mark ? 'check' : 'close'}
-            size={25}
-            color={item.mark ? Config.success : Config.error}
-          />
+        ))}
+        <View
+          style={[
+            styles.totalScoreWrapper,
+            {
+              backgroundColor:
+                percent < 50
+                  ? Config.error
+                  : percent < 75
+                  ? Config.warning
+                  : Config.success,
+            },
+          ]}>
+          <Text style={styles.totalScore}>
+            {sum}/{maxSum}
+          </Text>
         </View>
-      ))}
-      <View
-        style={[
-          styles.totalScoreWrapper,
-          {
-            backgroundColor:
-              percent < 50
-                ? Config.error
-                : percent < 75
-                ? Config.warning
-                : Config.success,
-          },
-        ]}>
-        <Text style={styles.totalScore}>
-          {sum}/{maxSum}
-        </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   fullHeight: {
     height: '100%',
+  },
+  stepWrapper: {
+    backgroundColor: Config.primary,
+    borderRadius: 50,
+    position: 'absolute',
+    right: 20,
+    top: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  step: {
+    fontSize: 16,
+    color: Config.white,
   },
   wrapper: {
     height: '100%',
@@ -205,9 +232,7 @@ const styles = StyleSheet.create({
     width: '45%',
   },
   flexInner: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexBasis: '90%',
   },
   yourAnswers: {
     fontSize: 20,
@@ -216,6 +241,9 @@ const styles = StyleSheet.create({
   subtitle: {
     marginLeft: 10,
     fontSize: 18,
+  },
+  withoutSpace: {
+    marginTop: 10,
   },
   text: {
     fontSize: 18,
@@ -250,9 +278,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   info: {
+    flex: 1,
     alignSelf: 'flex-start',
     marginHorizontal: 10,
-    marginVertical: 20,
+    marginBottom: 20,
+    marginTop: 50,
   },
   button: {
     width: '90%',
